@@ -2,6 +2,7 @@ import openai
 import json
 import os
 import random
+import requests
 
 import codecs
 from boto3 import Session
@@ -14,8 +15,17 @@ polly = session.client("polly")
 s3 = resource('s3')
 bucket_name = 'gpt3-video-scripts'
 bucket = s3.Bucket(bucket_name)
+s3_client = client('s3')
+lambda_client = client('lambda')
 
-# s3_client = client('s3')
+def invoke_lambda(function_name, payload):
+    response = lambda_client.invoke(
+        FunctionName=function_name,
+        InvocationType='Event',
+        Payload=json.dumps(payload)
+    )
+    return None
+
 
 # def create_bucket(bucket_name):
 #     # create bucket inside gpt3-video-scripts bucket
@@ -24,7 +34,6 @@ bucket = s3.Bucket(bucket_name)
 #     )
 #     bucket.put_object(Key=bucket_name, Body=new_bucket)
 #     return new_bucket
-
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
 def generate_video_script(director, topic):
@@ -37,6 +46,24 @@ def generate_video_script(director, topic):
     )
     return response.choices[0]['message']['content']
 
+def generate_image_with_dalle(prompt,filename):
+    try:
+        response = openai.Image.create(
+            prompt=prompt,
+            # specify other parameters as needed, such as size
+        )
+        image_url = response['data'][0]['url']
+        # Assuming the response contains a direct link to the image or the image data
+        img_response = requests.get(image_url)
+        img_response.raise_for_status()
+
+        # Upload the image to S3
+        bucket.put_object(Key=filename, Body=img_response.content)
+        # print(f"Image saved to S3 bucket '{bucket_name}' with filename '{filename}'")
+        return True
+    except Exception as e:
+        # print(f"An error occurred: {e}")
+        return False
 
 def split_script(script):
     # read everything here as voice 1: "\nVoice 1:\n"
@@ -58,7 +85,7 @@ def split_script(script):
     return result
 
 
-def process_script(directory_name, script_arr):
+def process_audio(directory_name, script_arr):
     voiceIDs = [
         "Matthew",
         "Russell",
@@ -81,7 +108,7 @@ def process_script(directory_name, script_arr):
             voiceIDs.remove(voiceID)
 
         # now process the audio
-        filename = f"{directory_name}/{line_num}.mp3"
+        filename = f"{directory_name}/audio/{line_num}.mp3"
         try:
             tts(line, voices[voice], filename)
         except:
@@ -99,7 +126,20 @@ def tts(text, voiceId, filename):
     bucket.put_object(Key=filename, Body=stream.read())
 
 
-def generate_name(director):
+def parse_script(script):
+    # Implement logic to split the script into scenes
+    # This is a placeholder function
+    scenes = script.split("Scene")  # Example, depends on your script format
+    return scenes
+
+def process_video(s3_location, script):
+    scenes = parse_script(script)
+    for i, scene in enumerate(scenes):
+        prompt = f"Scene description: {scene}"  # Create a suitable prompt for DALL·E
+        filename = f"{s3_location}/video/{i}.png"
+        generate_image_with_dalle(prompt, filename)
+
+def generate_foldername(director):
     # generate a random 8 digit number
     num = random.randint(10000000, 99999999)
     director = director.replace(" ", "-")
@@ -111,9 +151,16 @@ def lambda_handler(event, context):
     video_script = generate_video_script(director, topic)
     split_script_result = split_script(video_script)
     
-    directory_name = generate_name(director)
-    process_script(directory_name, split_script_result)
+    directory_name = generate_foldername(director)
+    
+    # process audio lambda
+    invoke_lambda("process_audio", {"folder_name": directory_name, "script_array": split_script_result})
+        
+    # video
+    invoke_lambda("process_video", {"folder_name": directory_name, "script": video_script})
+    
     return {
         'statusCode': 200,
-        'body': json.dumps(split_script_result)
+        # 'body': json.dumps({"folder_name": directory_name})
+        'body': json.dumps({"folder_name": directory_name})
     }

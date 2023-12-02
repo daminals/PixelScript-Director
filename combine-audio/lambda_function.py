@@ -77,8 +77,7 @@ def combine_audio_files(input_files, output_file):
 
 def lambda_handler(event, context):
     folder_name = event['folder_name']
-    all_audios = search_items_in_bucket(bucket_name, folder_name)
-    print(all_audios)
+    all_audios = search_items_in_bucket(bucket_name, folder_name + "/audio")
     combine_audio_files(all_audios, f'{folder_name}/output.mp3')
     return {
         'statusCode': 200,

@@ -2,3 +2,5 @@ venv
 script-gen/script.py
 script-gen/package
 combine-audio/package
+process-audio/package
+process-video/package
