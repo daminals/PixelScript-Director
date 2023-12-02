@@ -1,2 +1,3 @@
 venv
-package
+script-gen/script.py
+script-gen/package
