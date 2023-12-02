@@ -6,6 +6,7 @@ import random
 import codecs
 from boto3 import Session
 from boto3 import resource
+from boto3 import client
 
 session = Session(region_name="us-east-1")
 polly = session.client("polly")
@@ -14,9 +15,18 @@ s3 = resource('s3')
 bucket_name = 'gpt3-video-scripts'
 bucket = s3.Bucket(bucket_name)
 
+# s3_client = client('s3')
+
+# def create_bucket(bucket_name):
+#     # create bucket inside gpt3-video-scripts bucket
+#     new_bucket = s3_client.create_bucket(
+#         Bucket=bucket_name,
+#     )
+#     bucket.put_object(Key=bucket_name, Body=new_bucket)
+#     return new_bucket
+
+
 openai.api_key = os.environ["OPENAI_API_KEY"]
-
-
 def generate_video_script(director, topic):
     response = openai.ChatCompletion.create(
         model="ft:gpt-3.5-turbo-1106:personal::8R6vhAys",
@@ -26,38 +36,6 @@ def generate_video_script(director, topic):
         ],
     )
     return response.choices[0]['message']['content']
-
-# def split_script(script):
-#   # split the script into multiple voices with each voice indicated by a newline, a colon, voice and the number of this character currently speaking
-#   # Example:
-#   # \n Voice 1:
-#   lines = script.split("\\n")
-#   result = {}
-#   current_voice = None
-#   i = 0
-#   voiceCount = 0
-#   while i < len(lines):
-#       line = lines[i]
-#       if line.startswith("Voice"):
-#           current_voice = line.strip()
-#           if current_voice not in result:
-#               result[current_voice] = []
-#       else:
-#           line_length = len(line)
-#           if current_voice is not None:
-#             result[current_voice].append([voiceCount, line.strip()])
-#             voiceCount += 1
-#       i += 1
-#   return result
-# Example usage
-# script = """
-# Voice 1:
-# Hello
-# Voice 2:
-# Hi
-# Voice 1:
-# Bingo
-# """
 
 
 def split_script(script):
@@ -80,13 +58,13 @@ def split_script(script):
     return result
 
 
-def process_script(script_arr):
+def process_script(directory_name, script_arr):
     voiceIDs = [
         "Matthew",
         "Russell",
         "Nicole",
         "Emma",
-        "Aria",
+        "Ivy",
         "Kendra",
         "Kimberly",
         "Joey",
@@ -103,7 +81,7 @@ def process_script(script_arr):
             voiceIDs.remove(voiceID)
 
         # now process the audio
-        filename = f"voice{line_num}.mp3"
+        filename = f"{directory_name}/{line_num}.mp3"
         try:
             tts(line, voices[voice], filename)
         except:
@@ -121,17 +99,20 @@ def tts(text, voiceId, filename):
     bucket.put_object(Key=filename, Body=stream.read())
 
 
+def generate_name(director):
+    # generate a random 8 digit number
+    num = random.randint(10000000, 99999999)
+    director = director.replace(" ", "-")
+    return f"{director}-{num}"
+
 def lambda_handler(event, context):
     topic = event['topic']
     director = event['director']
-    # video_script = generate_video_script(director, topic)
-    # Example usage
-    # topic = "space exploration"
-    # director = "Steven Spielberg"
     video_script = generate_video_script(director, topic)
     split_script_result = split_script(video_script)
-    # return {"video_script":video_script, "split_script_result":split_script_result}
-    process_script(split_script_result)
+    
+    directory_name = generate_name(director)
+    process_script(directory_name, split_script_result)
     return {
         'statusCode': 200,
         'body': json.dumps(split_script_result)
