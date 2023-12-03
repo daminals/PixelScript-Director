@@ -4,3 +4,4 @@ script-gen/package
 combine-audio/package
 process-audio/package
 process-video/package
+combine-video/package

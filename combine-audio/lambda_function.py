@@ -46,8 +46,11 @@ def combine_audio_files(input_files, output_file):
         print("No input files provided.")
         return
       
+    # generate an 8 digit number
+    random_number = random.randint(10000000, 99999999)
+      
     # Create a temporary directory to store downloaded files
-    tmp_dir = '/tmp/audio_files'
+    tmp_dir = f'/tmp/audio_files{random_number}'
     os.makedirs(tmp_dir, exist_ok=True)
 
     # Download input files from S3 to the temporary directory
@@ -57,12 +60,13 @@ def combine_audio_files(input_files, output_file):
         download_file_from_s3(bucket_name, s3_key, local_path)
         local_files.append(local_path)
 
+    output_path = f"/tmp/output{random_number}.mp3"
     # Build the ffmpeg command
     ffmpeg_command = [
         'ffmpeg',
         '-i', 'concat:' + '|'.join(local_files),
         '-c', 'copy',
-        "/tmp/output.mp3"
+        output_path
     ]
 
     try:
@@ -70,7 +74,7 @@ def combine_audio_files(input_files, output_file):
         subprocess.run(ffmpeg_command, check=True)
         print(f"Audio files combined successfully. Output saved to {output_file}")
         # upload the output file to S3
-        s3_client.upload_file("/tmp/output.mp3", bucket_name, output_file)
+        s3_client.upload_file(output_path, bucket_name, output_file)
     except subprocess.CalledProcessError as e:
         print(f"Error combining audio files: {e}")
 
@@ -81,5 +85,5 @@ def lambda_handler(event, context):
     combine_audio_files(all_audios, f'{folder_name}/output.mp3')
     return {
         'statusCode': 200,
-        'body': json.dumps('Hello from Lambda!')
+        'body': json.dumps({"folder_name": folder_name})
     }

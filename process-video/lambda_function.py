@@ -26,11 +26,14 @@ def invoke_lambda(function_name, payload):
     )
     return None
 
-
+openai.api_key = os.environ["OPENAI_API_KEY"]
 def generate_image_with_dalle(prompt,filename):
     try:
         response = openai.Image.create(
+            model="dall-e-3",
             prompt=prompt,
+            n=1,
+            quality="hd",
             # specify other parameters as needed, such as size
         )
         image_url = response['data'][0]['url']
@@ -40,10 +43,10 @@ def generate_image_with_dalle(prompt,filename):
 
         # Upload the image to S3
         bucket.put_object(Key=filename, Body=img_response.content)
-        # print(f"Image saved to S3 bucket '{bucket_name}' with filename '{filename}'")
+        print(f"Image saved to S3 bucket '{bucket_name}' with filename '{filename}'")
         return True
     except Exception as e:
-        # print(f"An error occurred: {e}")
+        print(f"An error occurred: {e}")
         return False
 
 def parse_script(script):
@@ -52,19 +55,29 @@ def parse_script(script):
     scenes = script.split("Scene")  # Example, depends on your script format
     return scenes
 
-def process_video(s3_location, script):
+def process_video(s3_location, script, topic):
     scenes = parse_script(script)
-    for i, scene in enumerate(scenes):
-        prompt = f"Scene description: {scene}"  # Create a suitable prompt for DALL·E
+    i = 1
+    for scene in scenes:
+        prompt = f"Overarching story: {topic}; Scene description: {scene}"  # Create a suitable prompt for DALL·E
         filename = f"{s3_location}/video/{i}.png"
         generate_image_with_dalle(prompt, filename)
+        i+=1
 
 def lambda_handler(event, context):
     folder_name = event['folder_name']
     script = event['script']
+    title = event['title']
+    topic = event['topic']
+
+    # create title card:
+    generate_image_with_dalle(title, f"{folder_name}/video/0.png")
 
     # video
-    process_video(folder_name, script)
+    process_video(folder_name, script, topic)
+    
+    # invoke combine video
+    invoke_lambda('combine_video', {"folder_name": folder_name})
     
     return {
         'statusCode': 200,

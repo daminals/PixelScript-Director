@@ -157,10 +157,13 @@ def lambda_handler(event, context):
     invoke_lambda("process_audio", {"folder_name": directory_name, "script_array": split_script_result})
         
     # video
-    invoke_lambda("process_video", {"folder_name": directory_name, "script": video_script})
+    invoke_lambda("process_video", {"folder_name": directory_name, 
+                                    "script": video_script, 
+                                    "topic": topic,
+                                    "title": f"Create a title card for the plot: {topic}"})
     
     return {
         'statusCode': 200,
         # 'body': json.dumps({"folder_name": directory_name})
-        'body': json.dumps({"folder_name": directory_name})
+        'body': json.dumps({"folder_name": directory_name, "script": video_script})
     }
