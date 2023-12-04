@@ -5,3 +5,4 @@ combine-audio/package
 process-audio/package
 process-video/package
 combine-video/package
+generate-video/package

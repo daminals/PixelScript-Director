@@ -146,21 +146,44 @@ def generate_foldername(director):
     return f"{director}-{num}"
 
 def lambda_handler(event, context):
-    topic = event['topic']
-    director = event['director']
+    topic = None 
+    director = None
+    
+    if 'queryStringParameters' in event:
+        if 'topic' in event['queryStringParameters']:
+            topic = event['queryStringParameters']['topic']
+        if 'director' in event['queryStringParameters']:
+            director = event['queryStringParameters']['director']
+    else:
+      if 'topic' in event:
+        topic = event['topic']
+      if 'director' in event:
+        director = event['director']
+        
+    if topic is None or director is None:
+        return {
+            'statusCode': 400,
+            'body': json.dumps({"error": "Missing topic or director"})
+        }
     video_script = generate_video_script(director, topic)
     split_script_result = split_script(video_script)
     
     directory_name = generate_foldername(director)
     
-    # process audio lambda
-    invoke_lambda("process_audio", {"folder_name": directory_name, "script_array": split_script_result})
+    # # process audio lambda
+    # invoke_lambda("process_audio", {"folder_name": directory_name, "script_array": split_script_result})
         
-    # video
-    invoke_lambda("process_video", {"folder_name": directory_name, 
-                                    "script": video_script, 
-                                    "topic": topic,
-                                    "title": f"Create a title card for the plot: {topic}"})
+    # # video
+    # invoke_lambda("process_video", {"folder_name": directory_name, 
+    #                                 "script": video_script, 
+    #                                 "topic": topic,
+    #                                 "title": f"Create a title card for the plot: {topic}"})
+    
+    # res_body = {
+    #     "folder_name": directory_name,
+    #     "script": video_script
+    # }
+    
     
     return {
         'statusCode': 200,
