@@ -93,15 +93,15 @@ def lambda_handler(event, context):
     split_script_result = split_script(script)
         
     # process audio lambda
-    # invoke_lambda("process_audio", {"folder_name": directory_name, "script_array": split_script_result})
+    invoke_lambda("process_audio", {"folder_name": directory_name, "script_array": split_script_result})
         
-    # # # video
-    # invoke_lambda("process_video", {"folder_name": directory_name, 
-    #                                 "script": script, 
-    #                                 "topic": topic,
-    #                                 "title": f"Create a title card for the plot: {topic}"})
+    # process video lambda
+    invoke_lambda("process_video", {"folder_name": directory_name, 
+                                    "script": script, 
+                                    "topic": topic,
+                                    "title": f"Create a title card for the plot: {topic}"})
     
     return {
         'statusCode': 200,
-        'body': json.dumps({"folder_name": directory_name})
+        'body': json.dumps({"folder_name": directory_name, "script_arr": split_script_result})
     }
