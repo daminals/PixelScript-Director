@@ -27,7 +27,7 @@ jobs:
     - name: Configure python
       uses: actions/setup-python@v4
       with:
-        python-version: python3.11
+        python-version: python3.11.6
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -83,7 +83,7 @@ jobs:
     - name: Configure python
       uses: actions/setup-python@v4
       with:
-        python-version: python3.11
+        python-version: python3.11.6
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -119,7 +119,7 @@ jobs:
     - name: Configure python
       uses: actions/setup-python@v4
       with:
-        python-version: python3.11
+        python-version: python3.11.6
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -156,7 +156,7 @@ jobs:
     - name: Configure python
       uses: actions/setup-python@v4
       with:
-        python-version: python3.11
+        python-version: python3.11.6
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -192,7 +192,7 @@ jobs:
     - name: Configure python
       uses: actions/setup-python@v4
       with:
-        python-version: python3.11
+        python-version: python3.11.6
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -229,7 +229,7 @@ jobs:
     - name: Configure python
       uses: actions/setup-python@v4
       with:
-        python-version: python3.11
+        python-version: python3.11.6
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
