@@ -62,7 +62,7 @@ jobs:
         # Build a docker container and
         # push it to ECR so that it can be deployed to lambda
         cd combine-video
-        docker build --platform linux/amd64 -t moviepy .
+        docker build --platform linux/amd64 -t $CONTAINER_NAME .
         docker tag $CONTAINER_NAME:latest $ECR_REPOSITORY
         docker push $ECR_REPOSITORY
 
@@ -72,197 +72,197 @@ jobs:
         cd combine-video
         aws lambda update-function-code --function-name combine_video --image-uri $ECR_REPOSITORY > /dev/null 2>&1
       
-  combine_audio_lambda:
-    name: Deploy Combine Audio Lambda
-    runs-on: ubuntu-latest
-    environment: production
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+  # combine_audio_lambda:
+  #   name: Deploy Combine Audio Lambda
+  #   runs-on: ubuntu-latest
+  #   environment: production
+  #   steps:
+  #   - name: Checkout
+  #     uses: actions/checkout@v3
       
-    - name: Configure python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11.6'
+  #   - name: Configure python
+  #     uses: actions/setup-python@v4
+  #     with:
+  #       python-version: '3.11.6'
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
+  #   - name: Configure AWS credentials
+  #     uses: aws-actions/configure-aws-credentials@v1
+  #     with:
+  #       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #       aws-region: us-east-1
 
-    - name: Prepare Package
-      run: |
-        cd combine-audio
-        pip3 install -r requirements.txt --target ./package
+  #   - name: Prepare Package
+  #     run: |
+  #       cd combine-audio
+  #       pip3 install -r requirements.txt --target ./package
 
-    - name: Zip
-      run: |
-        cd combine-audio
-        cd package                                      
-        zip -r ../my_deployment_package.zip .
-        cd ..                                           
-        zip my_deployment_package.zip lambda_function.py
+  #   - name: Zip
+  #     run: |
+  #       cd combine-audio
+  #       cd package                                      
+  #       zip -r ../my_deployment_package.zip .
+  #       cd ..                                           
+  #       zip my_deployment_package.zip lambda_function.py
 
-    - name: Push to AWS
-      run: |
-        cd combine-audio
-        aws lambda update-function-code --function-name combine_audio --zip-file fileb://my_deployment_package.zip  > /dev/null 2>&1
+  #   - name: Push to AWS
+  #     run: |
+  #       cd combine-audio
+  #       aws lambda update-function-code --function-name combine_audio --zip-file fileb://my_deployment_package.zip  > /dev/null 2>&1
 
-  process_audio_lambda:
-    name: Deploy Process Audio Lambda
-    runs-on: ubuntu-latest
-    environment: production
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+  # process_audio_lambda:
+  #   name: Deploy Process Audio Lambda
+  #   runs-on: ubuntu-latest
+  #   environment: production
+  #   steps:
+  #   - name: Checkout
+  #     uses: actions/checkout@v3
       
-    - name: Configure python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11.6'
+  #   - name: Configure python
+  #     uses: actions/setup-python@v4
+  #     with:
+  #       python-version: '3.11.6'
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
+  #   - name: Configure AWS credentials
+  #     uses: aws-actions/configure-aws-credentials@v1
+  #     with:
+  #       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #       aws-region: us-east-1
 
-    - name: Prepare Package
-      run: |
-        cd process-audio
-        pip3 install -r requirements.txt --target ./package
+  #   - name: Prepare Package
+  #     run: |
+  #       cd process-audio
+  #       pip3 install -r requirements.txt --target ./package
 
-    - name: Zip
-      run: |
-        cd process-audio
-        cd package                                      
-        zip -r ../my_deployment_package.zip .
-        cd ..                                           
-        zip my_deployment_package.zip lambda_function.py
+  #   - name: Zip
+  #     run: |
+  #       cd process-audio
+  #       cd package                                      
+  #       zip -r ../my_deployment_package.zip .
+  #       cd ..                                           
+  #       zip my_deployment_package.zip lambda_function.py
 
-    - name: Push to AWS
-      run: |
-        cd process-audio
-        aws lambda update-function-code --function-name process_audio --zip-file fileb://my_deployment_package.zip  > /dev/null 2>&1
+  #   - name: Push to AWS
+  #     run: |
+  #       cd process-audio
+  #       aws lambda update-function-code --function-name process_audio --zip-file fileb://my_deployment_package.zip  > /dev/null 2>&1
 
 
-  process_video_lambda:
-    name: Deploy Process Video Lambda
-    runs-on: ubuntu-latest
-    environment: production
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+  # process_video_lambda:
+  #   name: Deploy Process Video Lambda
+  #   runs-on: ubuntu-latest
+  #   environment: production
+  #   steps:
+  #   - name: Checkout
+  #     uses: actions/checkout@v3
       
-    - name: Configure python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11.6'
+  #   - name: Configure python
+  #     uses: actions/setup-python@v4
+  #     with:
+  #       python-version: '3.11.6'
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
+  #   - name: Configure AWS credentials
+  #     uses: aws-actions/configure-aws-credentials@v1
+  #     with:
+  #       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #       aws-region: us-east-1
 
-    - name: Prepare Package
-      run: |
-        cd process-video
-        pip3 install -r requirements.txt --target ./package
+  #   - name: Prepare Package
+  #     run: |
+  #       cd process-video
+  #       pip3 install -r requirements.txt --target ./package
 
-    - name: Zip
-      run: |
-        cd process-video
-        cd package                                      
-        zip -r ../my_deployment_package.zip .
-        cd ..                                           
-        zip my_deployment_package.zip lambda_function.py
+  #   - name: Zip
+  #     run: |
+  #       cd process-video
+  #       cd package                                      
+  #       zip -r ../my_deployment_package.zip .
+  #       cd ..                                           
+  #       zip my_deployment_package.zip lambda_function.py
 
-    - name: Push to AWS
-      run: |
-        cd process-video
-        aws lambda update-function-code --function-name process_video --zip-file fileb://my_deployment_package.zip  > /dev/null 2>&1
+  #   - name: Push to AWS
+  #     run: |
+  #       cd process-video
+  #       aws lambda update-function-code --function-name process_video --zip-file fileb://my_deployment_package.zip  > /dev/null 2>&1
 
-  generate_video_lambda:
-    name: Deploy Generate Video Lambda
-    runs-on: ubuntu-latest
-    environment: production
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+  # generate_video_lambda:
+  #   name: Deploy Generate Video Lambda
+  #   runs-on: ubuntu-latest
+  #   environment: production
+  #   steps:
+  #   - name: Checkout
+  #     uses: actions/checkout@v3
       
-    - name: Configure python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11.6'
+  #   - name: Configure python
+  #     uses: actions/setup-python@v4
+  #     with:
+  #       python-version: '3.11.6'
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
+  #   - name: Configure AWS credentials
+  #     uses: aws-actions/configure-aws-credentials@v1
+  #     with:
+  #       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #       aws-region: us-east-1
 
-    - name: Prepare Package
-      run: |
-        cd generate-video
-        pip3 install -r requirements.txt --target ./package
+  #   - name: Prepare Package
+  #     run: |
+  #       cd generate-video
+  #       pip3 install -r requirements.txt --target ./package
 
-    - name: Zip
-      run: |
-        cd generate-video
-        cd package                                      
-        zip -r ../my_deployment_package.zip .
-        cd ..                                           
-        zip my_deployment_package.zip lambda_function.py
+  #   - name: Zip
+  #     run: |
+  #       cd generate-video
+  #       cd package                                      
+  #       zip -r ../my_deployment_package.zip .
+  #       cd ..                                           
+  #       zip my_deployment_package.zip lambda_function.py
 
-    - name: Push to AWS
-      run: |
-        cd generate-video
-        aws lambda update-function-code --function-name generate_video --zip-file fileb://my_deployment_package.zip  > /dev/null 2>&1
+  #   - name: Push to AWS
+  #     run: |
+  #       cd generate-video
+  #       aws lambda update-function-code --function-name generate_video --zip-file fileb://my_deployment_package.zip  > /dev/null 2>&1
 
 
-  script_generator_lambda:
-    name: Deploy Script Generator Lambda
-    runs-on: ubuntu-latest
-    environment: production
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+  # script_generator_lambda:
+  #   name: Deploy Script Generator Lambda
+  #   runs-on: ubuntu-latest
+  #   environment: production
+  #   steps:
+  #   - name: Checkout
+  #     uses: actions/checkout@v3
       
-    - name: Configure python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11.6'
+  #   - name: Configure python
+  #     uses: actions/setup-python@v4
+  #     with:
+  #       python-version: '3.11.6'
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
+  #   - name: Configure AWS credentials
+  #     uses: aws-actions/configure-aws-credentials@v1
+  #     with:
+  #       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #       aws-region: us-east-1
 
-    - name: Prepare Package
-      run: |
-        cd script-gen
-        pip3 install -r requirements.txt --target ./package
+  #   - name: Prepare Package
+  #     run: |
+  #       cd script-gen
+  #       pip3 install -r requirements.txt --target ./package
 
-    - name: Zip
-      run: |
-        cd script-gen
-        cd package                                      
-        zip -r ../my_deployment_package.zip .
-        cd ..                                           
-        zip my_deployment_package.zip lambda_function.py
+  #   - name: Zip
+  #     run: |
+  #       cd script-gen
+  #       cd package                                      
+  #       zip -r ../my_deployment_package.zip .
+  #       cd ..                                           
+  #       zip my_deployment_package.zip lambda_function.py
 
-    - name: Push to AWS
-      run: |
-        cd script-gen
-        aws lambda update-function-code --function-name scriptGen --zip-file fileb://my_deployment_package.zip  > /dev/null 2>&1
+  #   - name: Push to AWS
+  #     run: |
+  #       cd script-gen
+  #       aws lambda update-function-code --function-name scriptGen --zip-file fileb://my_deployment_package.zip  > /dev/null 2>&1
 
 
 
