@@ -1,4 +1,4 @@
-![github repo badge: Cloud Provider](https://img.shields.io/badge/Cloud%20Provider-AWS-181717?color=orange) ![github repo badge: Language](https://img.shields.io/badge/Language-Python-181717?color=blue)
+[![Deploy to Amazon Lambda](https://github.com/daminals/PixelScript-Director/actions/workflows/aws.yml/badge.svg)](https://github.com/daminals/PixelScript-Director/actions/workflows/aws.yml) ![github repo badge: Cloud Provider](https://img.shields.io/badge/Cloud%20Provider-AWS-181717?color=orange) ![github repo badge: Language](https://img.shields.io/badge/Language-Python-181717?color=blue)
 # PixelScript Director - AI Movie Generator
 
 ## Overview
