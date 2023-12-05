@@ -19,6 +19,9 @@ jobs:
     name: Deploy Combine Video Lambda
     runs-on: ubuntu-latest
     environment: production
+    strategy:
+      matrix:
+        lambda_name: [combine_video]
 
     steps:
     - name: Checkout
@@ -44,7 +47,7 @@ jobs:
 
     - name: Write FFmpeg to Bin
       run: |
-        cd combine-video
+        cd ${{ matrix.lambda_name }}
         mkdir bin
         cd bin
         cp ${{ steps.setup-ffmpeg.outputs.ffmpeg-path }} ./ffmpeg
@@ -62,7 +65,7 @@ jobs:
       run: |
         # Build a docker container and
         # push it to ECR so that it can be deployed to lambda
-        cd combine-video
+        cd ${{ matrix.lambda_name }}
         docker build --platform linux/amd64 -t $CONTAINER_NAME .
         docker tag $CONTAINER_NAME:latest $ECR_REPOSITORY
         docker push $ECR_REPOSITORY
@@ -70,8 +73,8 @@ jobs:
     - name: Deploy Combine Video Lambda
       id: deploy-to-aws
       run: |
-        cd combine-video
-        aws lambda update-function-code --function-name combine_video --image-uri $ECR_REPOSITORY > /dev/null 2>&1
+        cd ${{ matrix.lambda_name }}
+        aws lambda update-function-code --function-name ${{ matrix.lambda_name }} --image-uri $ECR_REPOSITORY > /dev/null 2>&1
       
   push_lambda_to_aws:
     name: Deploy to AWS Lambda
@@ -80,7 +83,7 @@ jobs:
     strategy:
       matrix:
         lambda_name: [combine_audio, process_video, process_audio, scriptGen, generate_video]
-        
+
     steps:
     - name: Checkout
       uses: actions/checkout@v3
