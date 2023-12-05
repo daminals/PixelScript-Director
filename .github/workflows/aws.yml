@@ -103,7 +103,7 @@ jobs:
         zip my_deployment_package.zip lambda_function.py
 
     - name: Push to AWS
-      run: aws lambda update-function-code --function-name combine_audio --zip-file fileb://my_deployment_package.zip  > /dev/null 2>&1
+      run: aws lambda update-function-code --function-name combine_audio --zip-file fileb://my_deployment_package.zip 
 
   process_audio_lambda:
     name: Deploy Process Audio Lambda
