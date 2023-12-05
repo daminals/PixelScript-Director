@@ -42,12 +42,9 @@ jobs:
         version: "4.4"
       id: setup-ffmpeg
 
-    - name: Enter combine_video directory
-      id: cd-combine-video
-      run: cd combine-video
-
     - name: Write FFmpeg to Bin
       run: |
+        cd combine-video
         mkdir bin
         cd bin
         cp ${{ steps.setup-ffmpeg.outputs.ffmpeg-path }} ./ffmpeg
@@ -92,11 +89,10 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
-    - name: Enter Combine Audio Directory
-      run: cd combine-audio
-
     - name: Prepare Package
-      run: pip3 install -r requirements.txt --target ./package
+      run: |
+        cd combine-audio
+        pip3 install -r requirements.txt --target ./package
 
     - name: Zip
       run: |
@@ -128,11 +124,10 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
-    - name: Enter Process Audio Directory
-      run: cd process-audio
-
     - name: Prepare Package
-      run: pip3 install -r requirements.txt --target ./package
+      run: |
+        pip3 install -r requirements.txt --target ./package
+        cd process-audio
 
     - name: Zip
       run: |
@@ -165,11 +160,10 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
-    - name: Enter Process Video Directory
-      run: cd process-video
-
     - name: Prepare Package
-      run: pip3 install -r requirements.txt --target ./package
+      run: |
+        cd process-video
+        pip3 install -r requirements.txt --target ./package
 
     - name: Zip
       run: |
@@ -201,11 +195,10 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
-    - name: Enter combine_audio directory
-      run: cd generate-video
-
     - name: Prepare Package
-      run: pip3 install -r requirements.txt --target ./package
+      run: |
+        cd generate-video
+        pip3 install -r requirements.txt --target ./package
 
     - name: Zip
       run: |
@@ -238,11 +231,10 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
-    - name: Enter script-gen directory
-      run: cd script-gen
-
     - name: Prepare Package
-      run: pip3 install -r requirements.txt --target ./package
+      run: |
+        cd script-gen
+        pip3 install -r requirements.txt --target ./package
 
     - name: Zip
       run: |
