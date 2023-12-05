@@ -108,7 +108,7 @@ jobs:
     - name: Push to AWS
       run: |
         cd combine-audio
-        aws lambda update-function-code --function-name combine_audio --zip-file fileb://my_deployment_package.zip 
+        aws lambda update-function-code --function-name combine_audio --zip-file fileb://my_deployment_package.zip  > /dev/null 2>&1
 
   process_audio_lambda:
     name: Deploy Process Audio Lambda
