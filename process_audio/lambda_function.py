@@ -26,7 +26,7 @@ def invoke_lambda(function_name, payload):
     )
     return None
 
-def process_audio(directory_name, script_arr):
+def process_audio(directory_name, script_arr, neural=False):
     voiceIDs = [
         "Matthew",
         "Russell",
@@ -38,6 +38,23 @@ def process_audio(directory_name, script_arr):
         "Joey",
         "Justin"
     ]
+    neural_voices = [
+      "Danielle",
+      "Gregory",
+      "Kevin",
+      "Joanna",
+      "Matthew",
+      "Ruth",
+      "Stephen",
+      "Ayanda",
+      "Niamh",
+      "Aria", 
+      "Arthur",
+      "Olivia"
+    ]
+    if neural:
+      # join the two lists
+      voiceIDs.extend(neural_voices)
     voices = {}
     line_num = 0
 
@@ -61,6 +78,7 @@ def tts(text, voiceId, filename):
     response = polly.synthesize_speech(
         Text=text,
         OutputFormat="mp3",
+        Engine="neural",
         VoiceId=voiceId
     )
     stream = response["AudioStream"]
@@ -72,7 +90,7 @@ def lambda_handler(event, context):
     script_array = event['script_array']
     
     # audio
-    process_audio(folder_name, script_array)
+    process_audio(folder_name, script_array, True)
     
     # invoke lambda to process audio
     invoke_lambda("combine_audio", {"folder_name": folder_name})

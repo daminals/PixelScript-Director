@@ -106,7 +106,7 @@ def lambda_handler(event, context):
     combine_audio_files(all_audios, f'{folder_name}/output.mp3', random_number)
     
     # do captions
-    caption_audio_file(f's3://{bucket_name}/{folder_name}/output.mp3', f'{folder_name}/output.srt', random_number)
+    caption_audio_file(f's3://{bucket_name}/{folder_name}/output.mp3', f'{folder_name}/caption', random_number)
     
     return {
         'statusCode': 200,
