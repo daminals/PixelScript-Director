@@ -9,7 +9,6 @@ on:
 env:
   ECR_REPOSITORY: 318710067667.dkr.ecr.us-east-1.amazonaws.com/moviepy:latest           # set this to your Amazon ECR repository name
   CONTAINER_NAME: moviepy           # set this to the name of the container in the
-                                               # containerDefinitions section of your task definition
 
 permissions:
   contents: read
@@ -45,7 +44,7 @@ jobs:
         version: "4.4"
       id: setup-ffmpeg
 
-    - name: Write FFmpeg to Bin
+    - name: Copy FFmpeg to Bin
       run: |
         cd ${{ matrix.lambda_name }}
         mkdir bin
@@ -58,7 +57,6 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v1
       with:
         mask-password: 'true'
-
 
     - name: Build, tag, and push image to Amazon ECR
       id: build-image
