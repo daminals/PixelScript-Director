@@ -61,6 +61,7 @@ jobs:
       run: |
         # Build a docker container and
         # push it to ECR so that it can be deployed to lambda
+        cd combine-video
         docker build --platform linux/amd64 -t moviepy .
         docker tag $CONTAINER_NAME:latest $ECR_REPOSITORY
         docker push $ECR_REPOSITORY
