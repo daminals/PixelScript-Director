@@ -6,7 +6,6 @@ director = "Quentin Tarantino"
 topic = "The Hateful Eight"
 
 
-
 url = "https://00z0vb71ui.execute-api.us-east-1.amazonaws.com/default/scriptGen"  # Replace with your API endpoint URL
 
 # add query string parameters if needed
