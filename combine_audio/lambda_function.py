@@ -79,7 +79,7 @@ def combine_audio_files(input_files, output_file, random_seed):
 def caption_audio_file(input_file, output_file, random_seed):
     job = transcription_client.start_transcription_job(
         TranscriptionJobName=f'transcription-job-{random_seed}',
-        LanguageCode='en-US'|'en-ZA'|'en-NZ'|'en-GB'|'en-AU',
+        LanguageCode='en-US',
         MediaFormat='mp3',
         Media={
             'MediaFileUri': input_file
