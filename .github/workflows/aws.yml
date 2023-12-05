@@ -68,7 +68,9 @@ jobs:
 
     - name: Deploy Combine Video Lambda
       id: deploy-to-aws
-      run: aws lambda update-function-code --function-name combine_video --image-uri $ECR_REPOSITORY > /dev/null 2>&1
+      run: |
+        cd combine-video
+        aws lambda update-function-code --function-name combine_video --image-uri $ECR_REPOSITORY > /dev/null 2>&1
       
   combine_audio_lambda:
     name: Deploy Combine Audio Lambda
@@ -104,7 +106,9 @@ jobs:
         zip my_deployment_package.zip lambda_function.py
 
     - name: Push to AWS
-      run: aws lambda update-function-code --function-name combine_audio --zip-file fileb://my_deployment_package.zip 
+      run: |
+        cd combine-audio
+        aws lambda update-function-code --function-name combine_audio --zip-file fileb://my_deployment_package.zip 
 
   process_audio_lambda:
     name: Deploy Process Audio Lambda
@@ -128,8 +132,8 @@ jobs:
 
     - name: Prepare Package
       run: |
-        pip3 install -r requirements.txt --target ./package
         cd process-audio
+        pip3 install -r requirements.txt --target ./package
 
     - name: Zip
       run: |
@@ -140,7 +144,9 @@ jobs:
         zip my_deployment_package.zip lambda_function.py
 
     - name: Push to AWS
-      run: aws lambda update-function-code --function-name process_audio --zip-file fileb://my_deployment_package.zip  > /dev/null 2>&1
+      run: |
+        cd process-audio
+        aws lambda update-function-code --function-name process_audio --zip-file fileb://my_deployment_package.zip  > /dev/null 2>&1
 
 
   process_video_lambda:
@@ -177,7 +183,9 @@ jobs:
         zip my_deployment_package.zip lambda_function.py
 
     - name: Push to AWS
-      run: aws lambda update-function-code --function-name process_video --zip-file fileb://my_deployment_package.zip  > /dev/null 2>&1
+      run: |
+        cd process-video
+        aws lambda update-function-code --function-name process_video --zip-file fileb://my_deployment_package.zip  > /dev/null 2>&1
 
   generate_video_lambda:
     name: Deploy Generate Video Lambda
@@ -213,7 +221,9 @@ jobs:
         zip my_deployment_package.zip lambda_function.py
 
     - name: Push to AWS
-      run: aws lambda update-function-code --function-name generate_video --zip-file fileb://my_deployment_package.zip  > /dev/null 2>&1
+      run: |
+        cd generate-video
+        aws lambda update-function-code --function-name generate_video --zip-file fileb://my_deployment_package.zip  > /dev/null 2>&1
 
 
   script_generator_lambda:
@@ -250,7 +260,9 @@ jobs:
         zip my_deployment_package.zip lambda_function.py
 
     - name: Push to AWS
-      run: aws lambda update-function-code --function-name scriptGen --zip-file fileb://my_deployment_package.zip  > /dev/null 2>&1
+      run: |
+        cd script-gen
+        aws lambda update-function-code --function-name scriptGen --zip-file fileb://my_deployment_package.zip  > /dev/null 2>&1
 
 
 
