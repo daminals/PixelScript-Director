@@ -1,8 +1,7 @@
 venv
-script-gen/script.py
-script-gen/package
-combine-audio/package
-process-audio/package
-process-video/package
-combine-video/package
-generate-video/package
+scriptGen/package
+combine_audio/package
+process_audio/package
+process_video/package
+combine_video/package
+generate_video/package
