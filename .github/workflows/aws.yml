@@ -72,7 +72,7 @@ jobs:
       id: deploy-to-aws
       run: |
         cd ${{ matrix.lambda_name }}
-        aws lambda update-function-code --function-name ${{ matrix.lambda_name }} --image-uri $ECR_REPOSITORY > /dev/null 2>&1
+        aws lambda update-function-code --function-name ${{ matrix.lambda_name }} --image-uri $ECR_REPOSITORY > /dev/null 
       
   push_lambda_to_aws:
     name: Deploy to AWS Lambda
