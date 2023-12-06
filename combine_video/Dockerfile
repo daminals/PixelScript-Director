@@ -6,9 +6,8 @@ COPY bin/ffmpeg /usr/local/bin/ffmpeg
 # Copy requirements.txt
 COPY requirements.txt ${LAMBDA_TASK_ROOT}
 
-RUN apt-get update 
-RUN apt-get wget
-RUN wget https://mirrors.kernel.org/ubuntu/pool/main/libf/libffi/libffi6_3.2.1-8_amd64.deb && apt install ./libffi6_3.2.1-8_amd64.deb && apt install libffi-dev
+RUN yum install -y wget
+RUN wget https://mirrors.kernel.org/ubuntu/pool/main/libf/libffi/libffi6_3.2.1-8_amd64.deb && yum -y install ./libffi6_3.2.1-8_amd64.deb && yum -y install libffi-dev
 
 
 # Install the latest pip
