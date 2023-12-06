@@ -89,7 +89,6 @@ def process_audio(directory_name, script_arr):
     voiceIDs = [
         "Matthew",
         "Russell",
-        "Nicole",
         "Emma",
         "Ivy",
         "Kendra",
@@ -97,6 +96,19 @@ def process_audio(directory_name, script_arr):
         "Joey",
         "Justin"
     ]
+    neural_voices = [
+      "Nicole",
+      "Amy",
+      "Arthur",
+      "Joanna",
+      "Kevin",
+      "Stephen",
+      "Salli"
+    ]
+    
+    # join the two lists
+    voiceIDs.extend(neural_voices)
+    
     voices = {}
     line_num = 0
 

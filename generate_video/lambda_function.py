@@ -96,10 +96,10 @@ def lambda_handler(event, context):
     invoke_lambda("process_audio", {"folder_name": directory_name, "script_array": split_script_result})
         
     # process video lambda
-    # invoke_lambda("process_video", {"folder_name": directory_name, 
-    #                                 "script": script, 
-    #                                 "topic": topic,
-    #                                 "title": f"Create a title card for the plot: {topic}"})
+    invoke_lambda("process_video", {"folder_name": directory_name, 
+                                    "script": script, 
+                                    "topic": topic,
+                                    "title": f"Create a title card for the plot: {topic}"})
     
     return {
         'statusCode': 200,
