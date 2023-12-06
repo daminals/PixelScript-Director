@@ -8,6 +8,7 @@ COPY requirements.txt ${LAMBDA_TASK_ROOT}
 
 # Install the latest pip
 RUN pip install --upgrade pip setuptools wheel
+RUN pip install ez_setup
 
 # Install the specified packages
 RUN pip install -r requirements.txt
