@@ -26,6 +26,14 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
+    - name: Install dependencies
+      run: |
+        # curl -LO http://archive.ubuntu.com/ubuntu/pool/main/libf/libffi/libffi6_3.2.1-8_amd64.deb
+        # dpkg -i libffi6_3.2.1-8_amd64.deb
+        wget https://mirrors.kernel.org/ubuntu/pool/main/libf/libffi/libffi6_3.2.1-8_amd64.deb
+        sudo apt install ./libffi6_3.2.1-8_amd64.deb
+        sudo apt install libffi-dev
+
     - name: Configure python
       uses: actions/setup-python@v4
       with:
@@ -57,14 +65,6 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v1
       with:
         mask-password: 'true'
-
-    - name: Install dependencies
-      run: |
-        # curl -LO http://archive.ubuntu.com/ubuntu/pool/main/libf/libffi/libffi6_3.2.1-8_amd64.deb
-        # dpkg -i libffi6_3.2.1-8_amd64.deb
-        wget https://mirrors.kernel.org/ubuntu/pool/main/libf/libffi/libffi6_3.2.1-8_amd64.deb
-        sudo apt install ./libffi6_3.2.1-8_amd64.deb
-        sudo apt install libffi-dev
 
     - name: Build, tag, and push image to Amazon ECR
       id: build-image

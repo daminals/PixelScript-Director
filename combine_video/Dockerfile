@@ -6,6 +6,8 @@ COPY bin/ffmpeg /usr/local/bin/ffmpeg
 # Copy requirements.txt
 COPY requirements.txt ${LAMBDA_TASK_ROOT}
 
+RUN sudo yum install -y libffi libffi-devel
+
 # Install the latest pip
 RUN pip install --upgrade pip setuptools wheel
 
