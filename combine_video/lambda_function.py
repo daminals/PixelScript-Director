@@ -44,7 +44,7 @@ def download_file_from_s3(bucket, key, local_path):
     s3_client.download_file(bucket, key, local_path)
 
 # COMBINE IMAGE FILES INTO A VIDEO
-def combine_video_files(input_files, input_audio, output_file):
+def combine_video_files(input_files, input_audio, input_srt, output_file):
     # Check if there are input files
     if not input_files:
         print("No input files provided.")
@@ -60,6 +60,10 @@ def combine_video_files(input_files, input_audio, output_file):
     local_audio = f"{audio_tmp_dir}/audio.mp3"
     print(f"local audio: {local_audio}")
     download_file_from_s3(bucket_name, input_audio, local_audio)
+    
+    # download the captions
+    local_srt = f"{audio_tmp_dir}/captions.srt"
+    download_file_from_s3(bucket_name, input_srt, local_srt)
     
     # Create a temporary directory to store downloaded files
     video_tmp_dir = f'/tmp/video_files{random_number}'
@@ -97,6 +101,8 @@ def combine_video_files(input_files, input_audio, output_file):
         '-c:a', 'aac',
         '-strict', 'experimental',
         '-b:a', '192k',  # Adjust audio bitrate as needed
+        # srt file
+        '-vf', f'subtitles={local_srt}',
         output_path
     ]
 
@@ -115,6 +121,7 @@ def lambda_handler(event, context):
     folder_name = event['folder_name']
     print(f"Folder name: {folder_name}")
     audio_file = f"{folder_name}/output.mp3"
+    captions_file = f"{folder_name}/caption.srt"
     all_videos = search_items_in_bucket(bucket_name, folder_name + "/video")
     combine_video_files(all_videos, audio_file, f'{folder_name}/output.mp4')
     print("Done")
