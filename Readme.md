@@ -16,6 +16,15 @@ The architecture of the project involves several key components:
 - Audio Combination Lambda: Combines the generated audio to an mp3 file.
 - Movie Rendering Lambda: Combines the generated images and audio to create a final mp4 file.
 
+### AWS S3 Bucket:
+Utilize a public S3 bucket to store all generated content, including the script, images, and audio. The lambdas will all write to the bucket
+
+### AWS API Gateway:
+There are two API endpoints: one for script generation and one for movie generation. The script generation endpoint will trigger the script generation lambda. This will display on the frontend, which will allow the user to modify the script as they please. Afterwards, the user can then trigger the generate video lambda, which calls upon the audio synthesis and image generation lambdas. When those are complete, then they will trigger the audio combination lambda and video rendering lambda respectively.
+
+### Amazon Polly & Transcribe:
+Amazon Polly is used to convert the script into spoken audio. Amazon Transcribe is used to convert the spoken audio into text. Unfortunately, there is currently no setting for Polly to directly output SRT captioning files, so we must use Transcribe to convert the audio back into text for the purposes of captioning the video.
+
 ## How It Works
 
 1. User Input: Users provide the director with a corresponding plot. The plot is then used to generate a script in the style of their chosen director.
@@ -34,4 +43,4 @@ All generated content, including the script, images, and audio, is stored in an 
 
 ## See It In Action
 
-Go to [PixelScript Director](http://ams560-web.s3-website-us-east-1.amazonaws.com/) to see the project in action.
+Go to [PixelScript Director](http://pixelscript-director.s3-website-us-east-1.amazonaws.com/) to see the project in action.

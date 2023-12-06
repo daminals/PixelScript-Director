@@ -6,6 +6,9 @@ COPY bin/ffmpeg /usr/local/bin/ffmpeg
 # Copy requirements.txt
 COPY requirements.txt ${LAMBDA_TASK_ROOT}
 
+# Install the latest pip
+RUN pip install --upgrade pip setuptools wheel
+
 # Install the specified packages
 RUN pip install -r requirements.txt
 
