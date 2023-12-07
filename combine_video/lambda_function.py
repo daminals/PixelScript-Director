@@ -41,6 +41,7 @@ def search_items_in_bucket(bucket_name, folder_name):
         return []
 
 def download_file_from_s3(bucket, key, local_path):
+    print(f"Downloading {key} to {local_path}")
     s3_client.download_file(bucket, key, local_path)
 
 # COMBINE IMAGE FILES INTO A VIDEO
@@ -106,6 +107,7 @@ def combine_video_files(input_files, input_audio, input_srt, output_file):
         output_path
     ]
 
+
     try:
       subprocess.run(ffmpeg_command, check=True)
     except subprocess.CalledProcessError as e:
@@ -123,7 +125,7 @@ def lambda_handler(event, context):
     audio_file = f"{folder_name}/output.mp3"
     captions_file = f"{folder_name}/caption.srt"
     all_videos = search_items_in_bucket(bucket_name, folder_name + "/video")
-    combine_video_files(all_videos, audio_file, f'{folder_name}/output.mp4')
+    combine_video_files(all_videos, audio_file, captions_file, f'{folder_name}/output.mp4')
     print("Done")
     return {
         'statusCode': 200,
