@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PixelScript Director</title>
+    <link rel="icon" type="image/png" href="icon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+            color: #333;
+            cursor: url(https://cdn.custom-cursor.com/db/19191/32/among-us-beautiful-witch-character-pointer.png)   , pointer !important
+        }
+        body.dark-mode {
+            background-color: #333;
+            color: white;
+        }
+        h1{
+            color:#444444;
+            font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            text-align: center;
+            font-size: 6rem;
+            margin: 5px;     
+        }
+        .flex-container {
+            position:relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgb(0, 179, 255);
+            border-radius: 10px;
+            margin-bottom:5px;
+        }
+
+        .flex-container img {
+            border-radius: 5px;
+            width:350px;
+            height:auto;
+        }
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: 20px 0;
+        }
+
+        label {
+            font-size: 1.2em;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1.1em;
+        }
+        input[type="submit"] {
+            background-color: rgb(149, 10, 144);
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.1em;
+            cursor: url(https://cdn.custom-cursor.com/db/19192/32/among-us-beautiful-witch-character-cursor.png) ,  auto !important;
+        }
+
+        /* Override styles for labels and inputs in dark mode */
+        body.dark-mode label, body.dark-mode .tooltip-container{
+            color: #333; 
+        }
+        body.dark-mode .header-container .tooltip-container {
+            color: white; /* Dark text for dark mode */
+        }
+
+        input[type="submit"]:hover {
+            background-color: rgb(176, 90, 219);
+        }
+        #randomButton{
+            background-color: rgb(149, 10, 144);
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.1em;
+            cursor: url(https://cdn.custom-cursor.com/db/19192/32/among-us-beautiful-witch-character-cursor.png) ,  default !important;
+        }
+        #randomButton:hover{
+            background-color: rgb(176, 90, 219);
+        }
+        #darkModeToggle{
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #0f0f0f;
+            color:#f4f4f4;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            max-width: 500px;
+            overflow-wrap: break-word;
+            cursor: url(https://cdn.custom-cursor.com/db/19192/32/among-us-beautiful-witch-character-cursor.png) ,  auto !important;
+        }
+        #darkModeToggle:hover{
+            background: #413f3f;
+        }
+        #generatedScript {
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            max-width: 500px;
+            overflow-wrap: break-word;
+            cursor: url(https://cdn.custom-cursor.com/db/19192/32/among-us-beautiful-witch-character-cursor.png) ,  auto !important;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+        }
+        .form-container, .video-container {
+            flex: 1; 
+        }
+        .form-container{
+            padding-right: 20px;
+        }
+        .video-container{
+            padding-left: 20px;
+            display: flex;
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            margin: 0 auto;
+        }
+        .waitvideo{
+            display:flex;
+            flex :1;
+            justify-content: center;
+            align-items: center;
+        }
+        .waitvideo img{
+            width:100%;
+            height:auto;
+            max-width: 70%;
+        }
+        textarea{
+            width: 100%;
+            height:400px;
+            padding:10px;
+            margin-top:10px;
+            border: 1px solid #ddd;
+            border-radius:4px;
+            font-size: 1em;
+            font-family: Arial,sans-serif;
+            resize: none;
+        }
+
+        .form-container {
+            flex: 1; 
+            max-width: 500px; 
+        }
+
+        .image-container {
+            flex: 1; 
+            max-width: 500px; 
+        }
+
+        .dalle-image {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .tooltip-container {
+            display: inline-block;
+            position: relative;
+            cursor: pointer;
+            margin-left: 10px;
+            cursor: url(https://cdn.custom-cursor.com/db/19192/32/among-us-beautiful-witch-character-cursor.png) ,  auto !important;
+        }
+        .header-container {
+            display: flex;
+            align-items: center;
+        }
+        .tooltip-text {
+            visibility: hidden;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 10px; 
+            position: absolute;
+            z-index: 1;
+            top: 50%;
+            left: 100%;
+            transform: translateY(-50%);
+            white-space: normal; 
+            opacity: 0;
+            transition: opacity 0.3s;
+            max-width: 500px !important; 
+            overflow-y: auto;
+            width:800px;
+        }
+
+        .tooltip-container:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+    </style>
+    <script>
+    </script>
+</head>
+    </style>
+    <script>
+    var folder_name;
+    function checkVideoAvailability(videoURL) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('HEAD', videoURL, true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {  // Video is available
+                    document.getElementById("generatedVideo").src = videoURL;
+                    document.getElementById("videoContainer").style.display = "flex";
+                    document.getElementById("wait-video").style.display = "none"; // Show the video container
+                    console.log("Video is now available.");
+                } else {
+                    console.log("Video not available yet, retrying...");
+                    setTimeout(function() { checkVideoAvailability(videoURL); }, 30000); // Retry after 3 seconds
+                }
+            }
+        };
+        xhr.send();
+    }
+
+    function submitEditedScript() {
+            var xhr = new XMLHttpRequest();
+            var editedScript = document.getElementById("editedScript").value;
+            var topic = encodeURIComponent(document.getElementById("topic").value);
+            var url = "https://00z0vb71ui.execute-api.us-east-1.amazonaws.com/default/generate_video";  // Replace with your second API Gateway endpoint
+
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    // Handle response here, e.g., show a success message
+                    console.log("Edited script submitted successfully.");
+                    document.getElementById("wait-video").style.display = "flex";
+                    var json = JSON.parse(xhr.responseText);
+                    console.log(json)
+                    if(json.folder_name){
+                        var videoURL = "https://gpt3-video-scripts.s3.amazonaws.com/"+json.folder_name+"/output.mp4"
+                        checkVideoAvailability(videoURL);
+                    }
+                    //document.getElementById("editedScript").innerHTML = json.folder_name
+                }
+            };
+
+            var data = JSON.stringify({
+                "script": editedScript,
+                "directory": folder_name,
+                "topic": topic
+            });
+
+            xhr.send(data);
+        }
+    function submitForm() {
+        var xhr = new XMLHttpRequest();
+        var director = encodeURIComponent(document.getElementById("director").value);
+        var topic = encodeURIComponent(document.getElementById("topic").value);
+        //var url = "https://ebub88mu4l.execute-api.us-east-1.amazonaws.com/Dev/Dalle?director=" + director + "&topic=" + topic;
+        var url = "https://00z0vb71ui.execute-api.us-east-1.amazonaws.com/default/scriptGen?director=" + director + "&topic=" + topic;
+        xhr.open("GET", url, true);
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var json = JSON.parse(xhr.responseText);
+                console.log(json);
+                // Display the generated script
+                folder_name = json.folder_name;
+                document.getElementById("editedScript").value = json.script;
+            }
+        };
+
+        xhr.send();
+    }
+    function darkmode() {
+        var darkModeButton = document.getElementById('darkModeToggle');
+        document.body.classList.toggle('dark-mode');
+
+        // Change button color based on mode
+        if (document.body.classList.contains('dark-mode')) {
+            darkModeButton.style.backgroundColor = 'white';
+            darkModeButton.style.color = 'black';
+            darkModeButton.innerText = 'Lightmode';
+        } else {
+            darkModeButton.style.backgroundColor = 'black';
+            darkModeButton.style.color = 'white';
+            darkModeButton.innerText = 'Darkmode';
+        }
+    }
+    function getRandomDirectorAndTopic() {
+    // TMDb endpoint for popular movies
+        const moviesUrl = 'https://api.themoviedb.org/3/movie/popular?api_key=88d86996c88a6b47c495a29746c4b11e';
+
+        // Fetch popular movies
+        fetch(moviesUrl)
+            .then(response => response.json())
+            .then(data => {
+                // Select a random movie from the list
+                const randomMovie = data.results[Math.floor(Math.random() * data.results.length)];
+                // Fetch credits for the selected movie
+                fetchMovieCredits(randomMovie.id);
+            })
+            .catch(error => {
+                console.log('Error fetching popular movies:', error);
+            });
+
+        // TMDb endpoint for movie genres
+        const genresUrl = 'https://api.themoviedb.org/3/genre/movie/list?api_key=88d86996c88a6b47c495a29746c4b11e';
+
+        // Fetch movie genres
+        fetch(genresUrl)
+            .then(response => response.json())
+            .then(data => {
+                const randomGenre = data.genres[Math.floor(Math.random() * data.genres.length)];
+                document.getElementById("topic").value = randomGenre.name; // Using genre name as topic
+            })
+            .catch(error => {
+                console.log('Error fetching genres:', error);
+            });
+    }
+
+    function fetchMovieCredits(movieId) {
+        const creditsUrl = `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=88d86996c88a6b47c495a29746c4b11e`;
+
+        fetch(creditsUrl)
+            .then(response => response.json())
+            .then(data => {
+                const director = data.crew.find(person => person.job === 'Director');
+                if (director) {
+                    document.getElementById("director").value = director.name;
+                }
+            })
+            .catch(error => console.error('Error fetching movie credits:', error));
+    }
+    const directors = [
+        "Jordan Peele", "Jordan Peele", 
+        "Quentin Tarantino", "Quentin Tarantino", 
+        "Taika Waititi", "Taika Waititi", 
+        "Steven Spielberg", 
+        "Michael Bay", 
+        "Steven Spielberg", 
+        "Tim Burton", 
+        "Wes Anderson", 
+        "James Cameron"
+    ];
+
+    const topics = [
+        "the last slice of pizza everyone is too full to finish", "the last slice of pizza everyone is too full to finish", 
+        "emotional love story between two meatballs", "emotional love story between two meatballs",
+        "plucky little piece of rust code, eager to embed himself in the linux kernel", "plucky little piece of rust code, eager to embed himself in the linux kernel", 
+        "Spaghetti Western about Cats", 
+        "alien plot to overthrow the CEO of JP Morgan Chase, Jamie Dimon", 
+        "ant crusaders on a mission to capture the holy land", 
+        "captivating tale about pirates on Mars", 
+        "traveling circus who performs on trains through the alps", 
+        "a dog's expedition to a fridge storing delicious meat"
+    ];
+    function getDirectorAndTopic() {
+        const randomIndex = Math.floor(Math.random() * directors.length);
+        document.getElementById("director").value = directors[randomIndex];
+        document.getElementById("topic").value = topics[randomIndex];
+    }
+
+    //window.onload = getRandomDirectorAndTopic;
+
+
+    </script>
+</head>
+<body>
+<div class="flex-container">
+    <button id="darkModeToggle" onclick="event.preventDefault(); darkmode();">Darkmode</button>
+    <!--<img src="https://media.tenor.com/uh6uSnPwFdgAAAAC/pixar-pixar-lamp.gif">-->
+    <h1>PixelScript Director</h1>
+    <!--<img src="https://media.tenor.com/JQIXRoPBLqYAAAAd/impressive-20th-century.gif">-->
+</div>
+<div class = "container">
+    <div class = "form-container">
+        <form id="scriptForm" onsubmit="event.preventDefault(); submitForm();">
+            <label for="director">Director:</label>
+            <div class="tooltip-container">
+                <i class="fas fa-info-circle"></i>
+                <span class="tooltip-text">This input box determines the style of movie you'd like to create. For instance, the two directors Jordan Peele and Steven Speilberg make very different kinds of films. Some recommended directors you could use are: Jordan Peele, Michael Bay, Steven Spielberg, Taika Waititi, and Quinten Tarantino</span>
+            </div>
+            <input type="text" id="director" name="director"><br>
+        
+            <label for="topic">Topic:</label>
+            <div class="tooltip-container">
+                <i class="fas fa-info-circle"></i>
+                <span class="tooltip-text">This input box determines the topic/plot of your movie. An example could be "An emotional love story about two meatballs"</span>
+            </div>
+            <input type="text" id="topic" name="topic"><br><br>
+        
+            <input type="submit" value="Submit">
+            <button id="randomButton" type="button" onclick="getDirectorAndTopic()">Get Random Director and Topic</button>
+        </form> 
+        <div class="header-container">
+            <h3>Generated Script:</h3>
+            <div class="tooltip-container">
+                <i class="fas fa-info-circle"></i>
+                <span class="tooltip-text">This is an editable textbox which is auto filled by our script generator. You have the ability to edit this in any way you wish, so long as you maintain the basic structure we have set out, which is a "Scene" tag to create a new scene (every scene has a corresponding image) and a "Voice" tag which is linked with a specific character. For example, if Voice 0 is used in two different places, the same voice will be used in the final video. Press "Submit Edited Script" on the bottom to generate your video, and within 3 minutes watch the magic of the PS Director! </span>
+            </div>
+        </div>
+        <div style="color: red;">
+            <div>Please ensure that you don't delete essential keywords such as 'Scene' or 'Voice.' Also, include characters along with their corresponding 'Voice' for clarity and context.</div>
+        </div>
+        <textarea id="editedScript"></textarea><br>
+        <input type="submit" value="Submit Edited Script" onclick="submitEditedScript()">
+    </div>
+    <div class="waitvideo" id="wait-video" style="display: none;">
+        <img src="https://i.gifer.com/ZKZg.gif" alt="Please Wait, Video generating">
+    </div>
+    <div class="video-container" id="videoContainer" style="display: none;">
+        <h3>Generated Video:</h3>
+        <video id="generatedVideo" controls style="width: 100%; max-width: 500px; height: auto;">
+            Your browser does not support the video tag.
+        </video>
+        <img src="https://media.tenor.com/HzpUIiGYviwAAAAC/animation-movies.gif" alt="It's done">
+    </div>
+</div>
+</body>
+</html>
