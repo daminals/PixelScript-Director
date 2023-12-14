@@ -33,6 +33,23 @@
             margin-bottom:5px;
         }
 
+        .box {
+            position:relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+            background-color: white;
+            border-radius: 10px;
+            margin-bottom:5px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: 20px 0;
+        }
+
         .flex-container img {
             border-radius: 5px;
             width:350px;
@@ -396,6 +413,9 @@
 </div>
 <div class = "container">
     <div class = "form-container">
+      <div class="box">
+        <p>This is an AI Filmmaker, which takes in a director and topic, and creates a short video in the style of that director. It is built utilizing cloud-native event-driven architecture to asynchronously process requests via AWS.</p>
+      </div>
         <form id="scriptForm" onsubmit="event.preventDefault(); submitForm();">
             <label for="director">Director:</label>
             <div class="tooltip-container">
