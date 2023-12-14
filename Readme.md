@@ -34,6 +34,9 @@ Amazon Polly is used to convert the script into spoken audio. Amazon Transcribe 
 ### AWS Elastic Container Registry:
 The dependencies for the combined audio and video rendering lambda are too large to be deployed directly to AWS Lambda via layer. Therefore, the lambda is deployed as a Docker container to ECR.
 
+### Cloudflare Pages:
+The frontend HTML is displayed and hosted on Cloudflare Pages. The frontend is responsible for calling the script generation and movie generation endpoints.
+
 ### Architecture Diagram:
 ![Architecture Diagram](https://github.com/daminals/PixelScript-Director/blob/master/frontend/architecture_diagram.png?raw=true)
 
