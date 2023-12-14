@@ -78,7 +78,7 @@ def tts(text, voiceId, filename):
     response = polly.synthesize_speech(
         Text=text,
         OutputFormat="mp3",
-        # Engine="neural",
+        Engine="neural",
         VoiceId=voiceId
     )
     stream = response["AudioStream"]
