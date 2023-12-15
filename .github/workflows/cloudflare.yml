@@ -27,6 +27,6 @@ jobs:
           directory: frontend
           branch: master
           # Optional: Change the working directory
-          workingDirectory: frontend
+          # workingDirectory: frontend
           # Optional: Change the Wrangler version, allows you to point to a specific version or a tag such as `beta`
           wranglerVersion: '3'
