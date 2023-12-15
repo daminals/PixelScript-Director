@@ -3,7 +3,8 @@ name: Deploy to Cloudflare Pages
 on:
   push:
     branches: [ "master" ]
-
+    paths:
+      - frontend/**
 
 jobs:
   publish:
