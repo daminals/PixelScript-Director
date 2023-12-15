@@ -257,7 +257,6 @@
         };
         xhr.send();
     }
-
     function submitEditedScript() {
             var xhr = new XMLHttpRequest();
             var editedScript = document.getElementById("editedScript").value;
@@ -287,7 +286,6 @@
                 "directory": folder_name,
                 "topic": topic
             });
-
             xhr.send(data);
         }
     function submitForm() {
@@ -307,7 +305,6 @@
                 document.getElementById("editedScript").value = json.script;
             }
         };
-
         xhr.send();
     }
     function darkmode() {
@@ -398,10 +395,6 @@
         document.getElementById("director").value = directors[randomIndex];
         document.getElementById("topic").value = topics[randomIndex];
     }
-
-    //window.onload = getRandomDirectorAndTopic;
-
-
     </script>
 </head>
 <body>
