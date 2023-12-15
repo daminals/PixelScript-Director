@@ -1,7 +1,7 @@
 venv
-scriptGen/package
-combine_audio/package
-process_audio/package
-process_video/package
-combine_video/package
-generate_video/package
+lambda/scriptGen/package
+lambda/combine_audio/package
+lambda/process_audio/package
+lambda/process_video/package
+lambda/combine_video/package
+lambda/generate_video/package
