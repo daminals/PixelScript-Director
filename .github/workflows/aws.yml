@@ -101,7 +101,10 @@ jobs:
       with:
         python-version: '3.11.6'
         cache: 'pip'
-    - run: |
+    
+    
+    - name: Set Up Package 
+      run: |
         cd lambda/${{ matrix.lambda_name }}
         pip3 install -r requirements.txt --target ./package
 
