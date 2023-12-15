@@ -6,7 +6,7 @@ on:
   push:
     branches: [ "master" ]
     paths:
-      - lambdas/**
+      - lambda/**
 
 env:
   ECR_REPOSITORY: 318710067667.dkr.ecr.us-east-1.amazonaws.com/moviepy:latest           # set this to your Amazon ECR repository name
