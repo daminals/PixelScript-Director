@@ -8,7 +8,7 @@ import codecs
 from boto3 import Session
 from boto3 import resource
 from boto3 import client
- 
+
 s3 = resource('s3')
 bucket_name = 'gpt3-video-scripts'
 bucket = s3.Bucket(bucket_name)
