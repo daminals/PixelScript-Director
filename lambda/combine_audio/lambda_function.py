@@ -69,7 +69,7 @@ def combine_audio_files(input_files, output_file, random_seed):
 
     try:
         # Run the ffmpeg command
-        subprocess.run(ffmpeg_command, check=True)
+        subprocess.run(ffmpeg_command, check=True, stdin=subprocess.DEVNULL)
         print(f"Audio files combined successfully. Output saved to {output_file}")
         # upload the output file to S3
         s3_client.upload_file(output_path, bucket_name, output_file)
