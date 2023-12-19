@@ -7,7 +7,7 @@ PixelScript Director is a cloud-driven project designed to automatically create 
 
 ## Demo
 
-The project is available for access [here](https://pixelscript.pages.dev/)
+The project is available for access [here](https://pixelscript.danielkogan.xyz/)
 
 The materials used in the demonstration are available [here](https://drive.google.com/drive/folders/1QrklSuCbuILiERnr61DIrsoIyLKlNsua?usp=share_link)
 
