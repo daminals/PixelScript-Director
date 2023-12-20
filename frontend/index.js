@@ -1,74 +1,157 @@
 // index.js
 
 var folder_name;
+// function checkVideoAvailability(videoURL) {
+//     var xhr = new XMLHttpRequest();
+//     xhr.open('HEAD', videoURL, true);
+//     xhr.onreadystatechange = function() {
+//         if (xhr.readyState === 4) {
+//             if (xhr.status === 200) {  // Video is available
+//                 document.getElementById("generatedVideo").src = videoURL;
+//                 document.getElementById("videoContainer").style.display = "flex";
+//                 document.getElementById("wait-video").style.display = "none"; // Show the video container
+//                 console.log("Video is now available.");
+//             } else {
+//                 console.log("Video not available yet, retrying...");
+//                 setTimeout(function() { checkVideoAvailability(videoURL); }, 30000); // Retry after 3 seconds
+//             }
+//         }
+//     };
+//     xhr.send();
+// }
+
 function checkVideoAvailability(videoURL) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('HEAD', videoURL, true);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {  // Video is available
-                document.getElementById("generatedVideo").src = videoURL;
-                document.getElementById("videoContainer").style.display = "flex";
-                document.getElementById("wait-video").style.display = "none"; // Show the video container
-                console.log("Video is now available.");
-            } else {
-                console.log("Video not available yet, retrying...");
-                setTimeout(function() { checkVideoAvailability(videoURL); }, 30000); // Retry after 3 seconds
-            }
-        }
-    };
-    xhr.send();
+  fetch(videoURL, { method: 'HEAD' })
+      .then(response => {
+          if (response.ok) {
+              document.getElementById("generatedVideo").src = videoURL;
+              document.getElementById("videoContainer").style.display = "flex";
+              document.getElementById("wait-video").style.display = "none"; // Show the video container
+              console.log("Video is now available.");
+          } else {
+              console.log("Video not available yet, retrying...");
+              setTimeout(function () { checkVideoAvailability(videoURL); }, 30000); // Retry after 30 seconds
+          }
+      })
+      .catch(error => {
+          console.error("Error checking video availability:", error);
+      });
 }
+
+
+
+// function submitEditedScript() {
+//         var xhr = new XMLHttpRequest();
+//         var editedScript = document.getElementById("editedScript").value;
+//         var topic = encodeURIComponent(document.getElementById("topic").value);
+//         var url = "https://00z0vb71ui.execute-api.us-east-1.amazonaws.com/default/generate_video";  // Replace with your second API Gateway endpoint
+
+//         xhr.open("POST", url, true);
+//         xhr.setRequestHeader("Content-Type", "application/json");
+
+//         xhr.onreadystatechange = function () {
+//             if (xhr.readyState === 4 && xhr.status === 200) {
+//                 // Handle response here, e.g., show a success message
+//                 console.log("Edited script submitted successfully.");
+//                 document.getElementById("wait-video").style.display = "flex";
+//                 var json = JSON.parse(xhr.responseText);
+//                 console.log(json)
+//                 if(json.folder_name){
+//                     var videoURL = "https://gpt3-video-scripts.s3.amazonaws.com/"+json.folder_name+"/output.mp4"
+//                     checkVideoAvailability(videoURL);
+//                 }
+//                 //document.getElementById("editedScript").innerHTML = json.folder_name
+//             }
+//         };
+
+//         var data = JSON.stringify({
+//             "script": editedScript,
+//             "directory": folder_name,
+//             "topic": topic
+//         });
+//         xhr.send(data);
+//     }
+
 function submitEditedScript() {
-        var xhr = new XMLHttpRequest();
-        var editedScript = document.getElementById("editedScript").value;
-        var topic = encodeURIComponent(document.getElementById("topic").value);
-        var url = "https://00z0vb71ui.execute-api.us-east-1.amazonaws.com/default/generate_video";  // Replace with your second API Gateway endpoint
+  const editedScript = document.getElementById("editedScript").value;
+  const topic = encodeURIComponent(document.getElementById("topic").value);
+  const url = "https://00z0vb71ui.execute-api.us-east-1.amazonaws.com/default/generate_video";  // Replace with your second API Gateway endpoint
 
-        xhr.open("POST", url, true);
-        xhr.setRequestHeader("Content-Type", "application/json");
-
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                // Handle response here, e.g., show a success message
-                console.log("Edited script submitted successfully.");
-                document.getElementById("wait-video").style.display = "flex";
-                var json = JSON.parse(xhr.responseText);
-                console.log(json)
-                if(json.folder_name){
-                    var videoURL = "https://gpt3-video-scripts.s3.amazonaws.com/"+json.folder_name+"/output.mp4"
-                    checkVideoAvailability(videoURL);
-                }
-                //document.getElementById("editedScript").innerHTML = json.folder_name
-            }
-        };
-
-        var data = JSON.stringify({
-            "script": editedScript,
-            "directory": folder_name,
-            "topic": topic
-        });
-        xhr.send(data);
-    }
-function submitForm() {
-    var xhr = new XMLHttpRequest();
-    var director = encodeURIComponent(document.getElementById("director").value);
-    var topic = encodeURIComponent(document.getElementById("topic").value);
-    //var url = "https://ebub88mu4l.execute-api.us-east-1.amazonaws.com/Dev/Dalle?director=" + director + "&topic=" + topic;
-    var url = "https://00z0vb71ui.execute-api.us-east-1.amazonaws.com/default/scriptGen?director=" + director + "&topic=" + topic;
-    xhr.open("GET", url, true);
-
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            var json = JSON.parse(xhr.responseText);
-            console.log(json);
-            // Display the generated script
-            folder_name = json.folder_name;
-            document.getElementById("editedScript").value = json.script;
-        }
-    };
-    xhr.send();
+  fetch(url, {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+          "script": editedScript,
+          "directory": folder_name,
+          "topic": topic
+      }),
+  })
+      .then(response => {
+          if (response.ok) {
+              console.log("Edited script submitted successfully.");
+              document.getElementById("wait-video").style.display = "flex";
+              return response.json();
+          } else {
+              throw new Error("Error submitting edited script");
+          }
+      })
+      .then(json => {
+          console.log(json);
+          if (json.folder_name) {
+              const videoURL = `https://gpt3-video-scripts.s3.amazonaws.com/${json.folder_name}/output.mp4`;
+              checkVideoAvailability(videoURL);
+          }
+      })
+      .catch(error => {
+          console.error("Error submitting edited script:", error);
+      });
 }
+
+// function submitForm() {
+//     var xhr = new XMLHttpRequest();
+//     var director = encodeURIComponent(document.getElementById("director").value);
+//     var topic = encodeURIComponent(document.getElementById("topic").value);
+//     //var url = "https://ebub88mu4l.execute-api.us-east-1.amazonaws.com/Dev/Dalle?director=" + director + "&topic=" + topic;
+//     var url = "https://00z0vb71ui.execute-api.us-east-1.amazonaws.com/default/scriptGen?director=" + director + "&topic=" + topic;
+//     xhr.open("GET", url, true);
+
+//     xhr.onreadystatechange = function () {
+//         if (xhr.readyState === 4 && xhr.status === 200) {
+//             var json = JSON.parse(xhr.responseText);
+//             console.log(json);
+//             // Display the generated script
+//             folder_name = json.folder_name;
+//             document.getElementById("editedScript").value = json.script;
+//         }
+//     };
+//     xhr.send();
+// }
+
+function submitForm() {
+  const director = encodeURIComponent(document.getElementById("director").value);
+  const topic = encodeURIComponent(document.getElementById("topic").value);
+  const url = `https://00z0vb71ui.execute-api.us-east-1.amazonaws.com/default/scriptGen?director=${director}&topic=${topic}`;
+
+  fetch(url)
+      .then(response => {
+          if (response.ok) {
+              return response.json();
+          } else {
+              throw new Error("Error submitting form");
+          }
+      })
+      .then(json => {
+          console.log(json);
+          folder_name = json.folder_name;
+          document.getElementById("editedScript").value = json.script;
+      })
+      .catch(error => {
+          console.error("Error submitting form:", error);
+      });
+}
+
 function darkmode() {
     var darkModeButton = document.getElementById('darkModeToggle');
     document.body.classList.toggle('dark-mode');

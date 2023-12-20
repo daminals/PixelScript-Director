@@ -13,7 +13,13 @@ The materials used in the demonstration are available [here](https://drive.googl
 
 ## Architecture
 
-The architecture of the project involves several key components:
+Since the goal of the project overall was to create an all-in-one experience for AI Video Generation, it was then necessary to pick tools which would allow for the most seamless experience. 
+
+Therefore, the backend of the project is based heavily on serverless microservice architecture, which allows for the project to be easily scalable and maintainable, as well as cost-effective. Lambdas seemed to be the most natural fit for the core backend component, especially as it integrated very well with other AWS services that were necessary from the start, such as text to speech with Polly, as well as easy storage. Since all of these components could be managed and accessed utilizing roles and permissions, it was very easy to integrate them into the project.
+
+The frontend of the project is based on a simple HTML page, which allows for the user to easily interact with the backend. The frontend is hosted on Cloudflare Pages, which allows for easy deployment and hosting of static sites, and integrates directly with the codebase on GitHub. The frontend is responsible for calling the script generation and movie generation endpoints.
+
+Below are the various components of the project and how they interact with each other:
 
 ### AWS Lambda Functions:
 - Script Generation Lambda: Utilizes OpenAI's fine-tuning model to generate a movie script based on user-provided inputs.
@@ -56,3 +62,7 @@ The Audio Combination Lambda combines the generated audio to an mp3 file.
 The generated images and audio are combined to create a movie file.
 7. Storage:
 All generated content, including the script, images, and audio, is stored in an S3 bucket for future reference.
+
+## Known Issues
+
+Occasionally, the final video will be corrupt, with the last few seconds of audio being cut, or the subtitles added improperly. This may be an issue with the amount of storage available to the lambda, or perhaps the way various components of the video are downloaded to the lambda. This issue is still a WIP.
