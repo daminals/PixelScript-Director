@@ -168,6 +168,7 @@ def compress_video(input_video):
 def lambda_handler(event, context):
     folder_name = event['folder_name']
     caption_enabled = event['caption_enabled']
+    print("Caption enabled: ", caption_enabled)
     print(f"Folder name: {folder_name}")
     audio_file = f"{folder_name}/output.mp3"
     captions_file = f"{folder_name}/caption.srt"

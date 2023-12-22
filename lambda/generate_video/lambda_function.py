@@ -70,7 +70,10 @@ def lambda_handler(event, context):
     if 'script' in body:
         script = body['script']
     if 'caption_enabled' in body:
+        print("Body Caption enabled: ", body['caption_enabled'], type(body['caption_enabled']))
         caption_enabled = bool(body['caption_enabled'])
+        
+    print("Caption enabled: ", caption_enabled)
     
     # if 'queryStringParameters' in event:
     #     if 'topic' in event['queryStringParameters']:

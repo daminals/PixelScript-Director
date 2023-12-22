@@ -101,6 +101,7 @@ def caption_audio_file(input_file, output_file, random_seed):
 def lambda_handler(event, context):
     folder_name = event['folder_name']
     caption_enabled = event['caption_enabled']
+    print("Caption enabled: ", caption_enabled)
     # generate an 8 digit number
     random_number = random.randint(10000000, 99999999)
     all_audios = search_items_in_bucket(bucket_name, folder_name + "/audio")

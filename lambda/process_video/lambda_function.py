@@ -72,12 +72,13 @@ def lambda_handler(event, context):
     title = event['title']
     topic = event['topic']
     caption_enabled = event['caption_enabled']
+    print("Caption enabled: ", caption_enabled)
 
     # create title card:
-    generate_image_with_dalle(title, f"{folder_name}/video/0.png")
+    # generate_image_with_dalle(title, f"{folder_name}/video/0.png")
 
     # video
-    process_video(folder_name, script, topic)
+    # process_video(folder_name, script, topic)
     
     # invoke combine video
     invoke_lambda('combine_video', {"folder_name": folder_name, "caption_enabled": caption_enabled})

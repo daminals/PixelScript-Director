@@ -89,6 +89,7 @@ def lambda_handler(event, context):
     folder_name = event['folder_name']
     script_array = event['script_array']
     caption_enabled = event['caption_enabled']
+    print("Caption enabled: ", caption_enabled)
     
     # audio
     process_audio(folder_name, script_array, True)
