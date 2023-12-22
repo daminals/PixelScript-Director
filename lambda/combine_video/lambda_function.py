@@ -131,7 +131,7 @@ def add_caption(input_video, input_srt):
       '-i', input_video,
       '-c:v', 'libx264',
       '-c:a', 'aac',
-      '-crf', '23',
+      '-r', '30',
       '-vf', f'subtitles={local_srt}',
       output_video
     ]
@@ -142,13 +142,40 @@ def add_caption(input_video, input_srt):
 
     return output_video
 
+def compress_video(input_video):
+    # generate an 8 digit number
+    random_number = random.randint(10000000, 99999999)
+    
+    output_video = f'/tmp/output_compress{random_number}.mp4'
+    
+    ffmpeg_command = [
+      'ffmpeg',
+      '-i', input_video,
+      '-c:v', 'libx264',
+      '-crf', '23',
+      '-preset', 'slower',
+      '-r', '30',
+      '-c:a', 'copy',
+      output_video
+    ]
+    
+    try:
+      subprocess.run(ffmpeg_command, check=True)
+    except subprocess.CalledProcessError as e:
+      print(f"An error occurred: {e}")
+
+    return output_video
+
+
+
 def lambda_handler(event, context):
     folder_name = event['folder_name']
     print(f"Folder name: {folder_name}")
     audio_file = f"{folder_name}/output.mp3"
     captions_file = f"{folder_name}/caption.srt"
-    all_videos = search_items_in_bucket(bucket_name, folder_name + "/video")
-    output_video_file = combine_video_files(all_videos, audio_file)
+    all_imgs = search_items_in_bucket(bucket_name, folder_name + "/video")
+    output_video_file = combine_video_files(all_imgs, audio_file)
+    output_video_file = compress_video(output_video_file)
     output_video_file = add_caption(output_video_file, captions_file)
     print(f"Output video file: {output_video_file}")
     # Upload to S3
