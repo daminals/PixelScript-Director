@@ -62,6 +62,7 @@ def lambda_handler(event, context):
     #     'statusCode': 200,
     #     'body': json.dumps(body)
     # }
+    print("body", body)
     
     if 'topic' in body:
         topic = body['topic']
