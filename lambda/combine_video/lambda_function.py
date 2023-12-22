@@ -45,7 +45,7 @@ def download_file_from_s3(bucket, key, local_path):
     s3_client.download_file(bucket, key, local_path)
 
 # COMBINE IMAGE FILES INTO A VIDEO
-def combine_video_files(input_files, input_audio, input_srt, output_file):
+def combine_video_files(input_files, input_audio):
     # Check if there are input files
     if not input_files:
         print("No input files provided.")
@@ -61,11 +61,7 @@ def combine_video_files(input_files, input_audio, input_srt, output_file):
     local_audio = f"{audio_tmp_dir}/audio.mp3"
     print(f"local audio: {local_audio}")
     download_file_from_s3(bucket_name, input_audio, local_audio)
-    
-    # download the captions
-    local_srt = f"{audio_tmp_dir}/captions.srt"
-    download_file_from_s3(bucket_name, input_srt, local_srt)
-    
+        
     # Create a temporary directory to store downloaded files
     video_tmp_dir = f'/tmp/video_files{random_number}'
     os.makedirs(video_tmp_dir, exist_ok=True)
@@ -88,7 +84,7 @@ def combine_video_files(input_files, input_audio, input_srt, output_file):
         for image in local_files:
             f.write(f"file '{image}'\n")
 
-    output_path = f'/tmp/output{random_number}.mp4'
+    output_path = f'{video_tmp_dir}/output{random_number}.mp4'
 
     # Use ffmpeg to create the video
     ffmpeg_command = [
@@ -103,10 +99,8 @@ def combine_video_files(input_files, input_audio, input_srt, output_file):
         '-strict', 'experimental',
         '-b:a', '192k',  # Adjust audio bitrate as needed
         # srt file
-        '-vf', f'subtitles={local_srt}',
         output_path
     ]
-
 
     try:
       subprocess.run(ffmpeg_command, check=True)
@@ -115,9 +109,34 @@ def combine_video_files(input_files, input_audio, input_srt, output_file):
       return
 
     # Upload to S3
-    s3_client.upload_file(output_path, bucket_name, output_file)
-    return
+    # s3_client.upload_file(output_path, bucket_name, output_file)
+    return output_path
 
+def add_caption(input_video, input_srt):
+    # generate an 8 digit number
+    random_number = random.randint(10000000, 99999999)
+
+    # Create a temporary directory to store downloaded files
+    srt_tmp_dir = f'/tmp/caption_files'
+    os.makedirs(srt_tmp_dir, exist_ok=True)
+  
+    # download the captions
+    local_srt = f"{srt_tmp_dir}/captions.srt"
+    download_file_from_s3(bucket_name, input_srt, local_srt)
+    
+    output_video = f'/tmp/output{random_number}.mp4'
+
+    ffmpeg_command = [
+      'ffmpeg',
+      '-i', input_video,
+      '-vf', f'subtitles={local_srt}',
+    ]
+    try:
+      subprocess.run(ffmpeg_command, check=True)
+    except subprocess.CalledProcessError as e:
+      print(f"An error occurred: {e}")
+
+    return output_video
 
 def lambda_handler(event, context):
     folder_name = event['folder_name']
@@ -125,7 +144,12 @@ def lambda_handler(event, context):
     audio_file = f"{folder_name}/output.mp3"
     captions_file = f"{folder_name}/caption.srt"
     all_videos = search_items_in_bucket(bucket_name, folder_name + "/video")
-    combine_video_files(all_videos, audio_file, captions_file, f'{folder_name}/output.mp4')
+    output_video_file = combine_video_files(all_videos, audio_file)
+    output_video_file = add_caption(output_video_file, captions_file)
+    # Upload to S3
+    s3_output_filename = f'{folder_name}/output.mp4'
+    s3_client.upload_file(output_video_file, bucket_name, s3_output_filename)
+
     print("Done")
     return {
         'statusCode': 200,

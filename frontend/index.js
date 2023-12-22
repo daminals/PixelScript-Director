@@ -30,15 +30,13 @@ function checkVideoAvailability(videoURL) {
               console.log("Video is now available.");
           } else {
               console.log("Video not available yet, retrying...");
-              setTimeout(function () { checkVideoAvailability(videoURL); }, 30000); // Retry after 30 seconds
+              setTimeout(function () { checkVideoAvailability(videoURL); }, 15000); // Retry after 15 seconds
           }
       })
       .catch(error => {
           console.error("Error checking video availability:", error);
       });
 }
-
-
 
 // function submitEditedScript() {
 //         var xhr = new XMLHttpRequest();
