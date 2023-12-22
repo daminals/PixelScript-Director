@@ -131,6 +131,7 @@ def add_caption(input_video, input_srt):
       '-i', input_video,
       '-c:v', 'libx264',
       '-c:a', 'aac',
+      '-crf', '23',
       '-vf', f'subtitles={local_srt}',
       output_video
     ]
