@@ -69,8 +69,9 @@ def process_audio(directory_name, script_arr, neural=False):
         filename = f"{directory_name}/audio/{line_num}.mp3"
         try:
             tts(line, voices[voice], filename)
-        except:
+        except e as Exception:
             print(f"{voices[voice]} is a failure")
+            print("Exception: ", e)
         line_num += 1
 
 

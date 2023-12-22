@@ -163,8 +163,6 @@ def compress_video(input_video):
 
     return output_video
 
-
-
 def lambda_handler(event, context):
     folder_name = event['folder_name']
     caption_enabled = event['caption_enabled']

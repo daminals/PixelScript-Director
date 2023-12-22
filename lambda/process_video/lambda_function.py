@@ -30,10 +30,10 @@ openai.api_key = os.environ["OPENAI_API_KEY"]
 def generate_image_with_dalle(prompt,filename):
     try:
         response = openai.Image.create(
-            model="dall-e-2",
-            quality="standard",
-            # model="dall-e-3",
-            # quality="hd"
+            # model="dall-e-2",
+            # quality="standard",
+            model="dall-e-3",
+            quality="hd",
             prompt=prompt,
             n=1
             # specify other parameters as needed, such as size
@@ -75,10 +75,10 @@ def lambda_handler(event, context):
     print("Caption enabled: ", caption_enabled)
 
     # create title card:
-    # generate_image_with_dalle(title, f"{folder_name}/video/0.png")
+    generate_image_with_dalle(title, f"{folder_name}/video/0.png")
 
     # video
-    # process_video(folder_name, script, topic)
+    process_video(folder_name, script, topic)
     
     # invoke combine video
     invoke_lambda('combine_video', {"folder_name": folder_name, "caption_enabled": caption_enabled})
