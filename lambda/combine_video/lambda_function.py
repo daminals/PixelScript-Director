@@ -130,6 +130,7 @@ def add_caption(input_video, input_srt):
       'ffmpeg',
       '-i', input_video,
       '-vf', f'subtitles={local_srt}',
+      output_video
     ]
     try:
       subprocess.run(ffmpeg_command, check=True)
@@ -146,6 +147,7 @@ def lambda_handler(event, context):
     all_videos = search_items_in_bucket(bucket_name, folder_name + "/video")
     output_video_file = combine_video_files(all_videos, audio_file)
     output_video_file = add_caption(output_video_file, captions_file)
+    print(f"Output video file: {output_video_file}")
     # Upload to S3
     s3_output_filename = f'{folder_name}/output.mp4'
     s3_client.upload_file(output_video_file, bucket_name, s3_output_filename)
