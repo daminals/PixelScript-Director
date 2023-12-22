@@ -129,6 +129,8 @@ def add_caption(input_video, input_srt):
     ffmpeg_command = [
       'ffmpeg',
       '-i', input_video,
+      '-c:v', 'libx264',
+      '-c:a', 'aac',
       '-vf', f'subtitles={local_srt}',
       output_video
     ]
