@@ -1,82 +1,106 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>PixelScript Director</title>
-    <link rel="icon" type="image/png" href="icon.ico">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <script src="index.js"></script>
-    <link rel="stylesheet" href="style.css">
+  <title>PixelScript Director</title>
+  <link rel="icon" type="image/png" href="icon.ico">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <script src="index.js"></script>
+  <link rel="stylesheet" href="style.css">
 
-    <!-- Social Media (twitter/fb) sharing metas -->
-    <meta property="og:title" content="PixelScript Director">
-    <meta property="og:description" content="Innovative AI Filmmaker designed to create an all-in-one user experience for video creation">
-    <meta property="og:image" content="/pixelscript_director.png">
-    <meta property="og:url" content="http://pixelscript.danielkogan.xyz">
-    <meta name="twitter:card" content="summary_large_image">
+  <!-- Social Media (twitter/fb) sharing metas -->
+  <meta property="og:title" content="PixelScript Director">
+  <meta property="og:description"
+    content="Innovative AI Filmmaker designed to create an all-in-one user experience for video creation">
+  <meta property="og:image" content="/pixelscript_director.png">
+  <meta property="og:url" content="http://pixelscript.danielkogan.xyz">
+  <meta name="twitter:card" content="summary_large_image">
 
-    <meta property="og:site_name" content="PixelScript Director">
-    <meta name="twitter:image:alt" content="Innovative AI Filmmaker designed to create an all-in-one user experience for video creation">
+  <meta property="og:site_name" content="PixelScript Director">
+  <meta name="twitter:image:alt"
+    content="Innovative AI Filmmaker designed to create an all-in-one user experience for video creation">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Innovative AI Filmmaker designed to create an all-in-one user experience for video creation">
-    <meta name="author" content="Daniel Kogan">
-    <meta name="keywords" content="OpenAI, AI, Filmmaking, Video Editing, Script Generator">
-    <!-- end -->
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Innovative AI Filmmaker designed to create an all-in-one user experience for video creation">
+  <meta name="author" content="Daniel Kogan">
+  <meta name="keywords" content="OpenAI, AI, Filmmaking, Video Editing, Script Generator">
+  <!-- end -->
+
 </head>
+
 <body>
-<div class="flex-container">
+  <div class="flex-container">
     <button id="darkModeToggle" onclick="event.preventDefault(); darkmode();">Darkmode</button>
     <!--<img src="https://media.tenor.com/uh6uSnPwFdgAAAAC/pixar-pixar-lamp.gif">-->
     <h1>PixelScript Director</h1>
     <!--<img src="https://media.tenor.com/JQIXRoPBLqYAAAAd/impressive-20th-century.gif">-->
-</div>
-<div class = "container">
-    <div class = "form-container">
+  </div>
+  <div class="container">
+    <div class="form-container">
       <div class="box">
-        <p>This is an AI Filmmaker, which takes in a director and topic, and creates a short video in the style of that director. It is built utilizing cloud-native event-driven architecture to asynchronously process requests via AWS.</p>
+        <p>This is an AI Filmmaker, which takes in a director and topic, and creates a short video in the style of that
+          director. It is built utilizing cloud-native event-driven architecture to asynchronously process requests via
+          AWS.</p>
       </div>
-        <form id="scriptForm" onsubmit="event.preventDefault(); submitForm();">
-            <label for="director">Director:</label>
-            <div class="tooltip-container">
-                <i class="fas fa-info-circle"></i>
-                <span class="tooltip-text">This input box determines the style of movie you'd like to create. For instance, the two directors Jordan Peele and Steven Speilberg make very different kinds of films. Some recommended directors you could use are: Jordan Peele, Michael Bay, Steven Spielberg, Taika Waititi, and Quinten Tarantino</span>
-            </div>
-            <input type="text" id="director" name="director"><br>
-        
-            <label for="topic">Topic:</label>
-            <div class="tooltip-container">
-                <i class="fas fa-info-circle"></i>
-                <span class="tooltip-text">This input box determines the topic/plot of your movie. An example could be "An emotional love story about two meatballs"</span>
-            </div>
-            <input type="text" id="topic" name="topic"><br><br>
-        
-            <input type="submit" value="Submit">
-            <button id="randomButton" type="button" onclick="getDirectorAndTopic()">Get Random Director and Topic</button>
-        </form> 
-        <div class="header-container">
-            <h3>Generated Script:</h3>
-            <div class="tooltip-container">
-                <i class="fas fa-info-circle"></i>
-                <span class="tooltip-text">This is an editable textbox which is auto filled by our script generator. You have the ability to edit this in any way you wish, so long as you maintain the basic structure we have set out, which is a "Scene" tag to create a new scene (every scene has a corresponding image) and a "Voice" tag which is linked with a specific character. For example, if Voice 0 is used in two different places, the same voice will be used in the final video. Press "Submit Edited Script" on the bottom to generate your video, and within 3 minutes watch the magic of the PS Director! </span>
-            </div>
+      <form id="scriptForm" onsubmit="event.preventDefault(); submitForm();">
+        <label for="director">Director:</label>
+        <div class="tooltip-container">
+          <i class="fas fa-info-circle"></i>
+          <span class="tooltip-text">This input box determines the style of movie you'd like to create. For instance,
+            the two directors Jordan Peele and Steven Speilberg make very different kinds of films. Some recommended
+            directors you could use are: Jordan Peele, Michael Bay, Steven Spielberg, Taika Waititi, and Quinten
+            Tarantino</span>
         </div>
-        <div style="color: red;">
-            <div>Please ensure that you don't delete essential keywords such as 'Scene' or 'Voice.' Also, include characters along with their corresponding 'Voice' for clarity and context.</div>
+        <input type="text" id="director" name="director"><br>
+
+        <label for="topic">Topic:</label>
+        <div class="tooltip-container">
+          <i class="fas fa-info-circle"></i>
+          <span class="tooltip-text">This input box determines the topic/plot of your movie. An example could be "An
+            emotional love story about two meatballs"</span>
         </div>
-        <textarea id="editedScript"></textarea><br>
-        <input type="submit" value="Submit Edited Script" onclick="submitEditedScript()">
+        <input type="text" id="topic" name="topic"><br><br>
+
+        <!-- Checkbox for enabling/disabling captions with styling -->
+        <div class="checkbox-container">
+          <label for="enableCaptions" class="checkbox-label">Enable Captions:</label>
+          <input type="checkbox" id="enableCaptions" class="styled-checkbox" name="enableCaptions">
+        </div>
+
+        <input type="submit" value="Submit">
+        <button id="randomButton" type="button" onclick="getDirectorAndTopic()">Get Random Director and Topic</button>
+      </form>
+      <div class="header-container">
+        <h3>Generated Script:</h3>
+        <div class="tooltip-container">
+          <i class="fas fa-info-circle"></i>
+          <span class="tooltip-text">This is an editable textbox which is auto filled by our script generator. You have
+            the ability to edit this in any way you wish, so long as you maintain the basic structure we have set out,
+            which is a "Scene" tag to create a new scene (every scene has a corresponding image) and a "Voice" tag which
+            is linked with a specific character. For example, if Voice 0 is used in two different places, the same voice
+            will be used in the final video. Press "Submit Edited Script" on the bottom to generate your video, and
+            within 3 minutes watch the magic of the PS Director! </span>
+        </div>
+      </div>
+      <div style="color: red;">
+        <div>Please ensure that you don't delete essential keywords such as 'Scene' or 'Voice.' Also, include characters
+          along with their corresponding 'Voice' for clarity and context.</div>
+      </div>
+      <textarea id="editedScript"></textarea><br>
+      <input type="submit" value="Submit Edited Script" onclick="submitEditedScript()">
     </div>
     <div class="waitvideo" id="wait-video" style="display: none;">
-        <img src="https://i.gifer.com/ZKZg.gif" alt="Please Wait, Video generating">
+      <img src="https://i.gifer.com/ZKZg.gif" alt="Please Wait, Video generating">
     </div>
     <div class="video-container" id="videoContainer" style="display: none;">
-        <h3>Generated Video:</h3>
-        <video id="generatedVideo" controls style="width: 100%; max-width: 500px; height: auto;">
-            Your browser does not support the video tag.
-        </video>
-        <img src="https://media.tenor.com/HzpUIiGYviwAAAAC/animation-movies.gif" alt="It's done">
+      <h3>Generated Video:</h3>
+      <video id="generatedVideo" controls style="width: 100%; max-width: 500px; height: auto;">
+        Your browser does not support the video tag.
+      </video>
+      <img src="https://media.tenor.com/HzpUIiGYviwAAAAC/animation-movies.gif" alt="It's done">
     </div>
-</div>
+  </div>
 </body>
+
 </html>

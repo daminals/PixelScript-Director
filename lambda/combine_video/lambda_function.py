@@ -129,9 +129,6 @@ def add_caption(input_video, input_srt):
     ffmpeg_command = [
       'ffmpeg',
       '-i', input_video,
-      '-c:v', 'libx264',
-      '-c:a', 'aac',
-      '-r', '30',
       '-vf', f'subtitles={local_srt}',
       output_video
     ]
@@ -170,13 +167,16 @@ def compress_video(input_video):
 
 def lambda_handler(event, context):
     folder_name = event['folder_name']
+    caption_enabled = event['caption_enabled']
     print(f"Folder name: {folder_name}")
     audio_file = f"{folder_name}/output.mp3"
     captions_file = f"{folder_name}/caption.srt"
     all_imgs = search_items_in_bucket(bucket_name, folder_name + "/video")
     output_video_file = combine_video_files(all_imgs, audio_file)
-    output_video_file = compress_video(output_video_file)
-    output_video_file = add_caption(output_video_file, captions_file)
+    
+    if caption_enabled:
+      output_video_file = compress_video(output_video_file)
+      output_video_file = add_caption(output_video_file, captions_file)
     print(f"Output video file: {output_video_file}")
     # Upload to S3
     s3_output_filename = f'{folder_name}/output.mp4'

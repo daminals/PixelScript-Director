@@ -71,6 +71,7 @@ def lambda_handler(event, context):
     script = event['script']
     title = event['title']
     topic = event['topic']
+    caption_enabled = event['caption_enabled']
 
     # create title card:
     generate_image_with_dalle(title, f"{folder_name}/video/0.png")
@@ -79,7 +80,7 @@ def lambda_handler(event, context):
     process_video(folder_name, script, topic)
     
     # invoke combine video
-    invoke_lambda('combine_video', {"folder_name": folder_name})
+    invoke_lambda('combine_video', {"folder_name": folder_name, "caption_enabled": caption_enabled})
     
     return {
         'statusCode': 200,

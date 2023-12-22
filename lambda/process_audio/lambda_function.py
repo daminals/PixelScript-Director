@@ -88,12 +88,13 @@ def tts(text, voiceId, filename):
 def lambda_handler(event, context):
     folder_name = event['folder_name']
     script_array = event['script_array']
+    caption_enabled = event['caption_enabled']
     
     # audio
     process_audio(folder_name, script_array, True)
     
     # invoke lambda to process audio
-    invoke_lambda("combine_audio", {"folder_name": folder_name})
+    invoke_lambda("combine_audio", {"folder_name": folder_name, "caption_enabled": caption_enabled})
 
     return {
         'statusCode': 200,

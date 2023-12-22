@@ -74,6 +74,8 @@ function submitEditedScript() {
   const editedScript = document.getElementById("editedScript").value;
   const topic = encodeURIComponent(document.getElementById("topic").value);
   const url = "https://00z0vb71ui.execute-api.us-east-1.amazonaws.com/default/generate_video";  // Replace with your second API Gateway endpoint
+  // Check if captions are enabled
+  var enableCaptions = document.getElementById("enableCaptions").checked;
 
   fetch(url, {
       method: "POST",
@@ -83,7 +85,8 @@ function submitEditedScript() {
       body: JSON.stringify({
           "script": editedScript,
           "directory": folder_name,
-          "topic": topic
+          "topic": topic,
+          "caption_enabled": enableCaptions
       }),
   })
       .then(response => {

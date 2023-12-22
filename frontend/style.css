@@ -225,3 +225,53 @@ textarea{
   opacity: 1;
 }
 
+
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+/* Style for the checkbox label */
+.checkbox-label {
+  margin-right: 10px;
+}
+
+/* Style for the checkbox itself */
+.styled-checkbox {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #3498db;
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin: 0;
+  position: relative;
+}
+
+/* Style for the checkbox when checked */
+.styled-checkbox:checked {
+  background-color: #3498db;
+}
+
+/* Style for the checkmark inside the checkbox */
+.styled-checkbox::after {
+  content: '';
+  position: absolute;
+  display: none;
+}
+
+/* Style for the checkmark when the checkbox is checked */
+.styled-checkbox:checked::after {
+  display: block;
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}

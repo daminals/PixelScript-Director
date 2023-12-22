@@ -55,6 +55,7 @@ def lambda_handler(event, context):
     topic = None 
     directory_name = None
     script = None
+    caption_enabled = False
     
     body = json.loads(event['body'])
     # return {
@@ -68,6 +69,8 @@ def lambda_handler(event, context):
         directory_name = body['directory']
     if 'script' in body:
         script = body['script']
+    if 'caption_enabled' in body:
+        caption_enabled = bool(body['caption_enabled'])
     
     # if 'queryStringParameters' in event:
     #     if 'topic' in event['queryStringParameters']:
@@ -93,12 +96,13 @@ def lambda_handler(event, context):
     split_script_result = split_script(script)
         
     # process audio lambda
-    invoke_lambda("process_audio", {"folder_name": directory_name, "script_array": split_script_result})
+    invoke_lambda("process_audio", {"folder_name": directory_name, "script_array": split_script_result, "caption_enabled": caption_enabled})
         
     # process video lambda
     invoke_lambda("process_video", {"folder_name": directory_name, 
                                     "script": script, 
                                     "topic": topic,
+                                    "caption_enabled": caption_enabled,
                                     "title": f"Create a title card for the plot: {topic}"})
     
     return {

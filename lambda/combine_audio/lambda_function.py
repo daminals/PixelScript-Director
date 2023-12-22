@@ -100,13 +100,15 @@ def caption_audio_file(input_file, output_file, random_seed):
 
 def lambda_handler(event, context):
     folder_name = event['folder_name']
+    caption_enabled = event['caption_enabled']
     # generate an 8 digit number
     random_number = random.randint(10000000, 99999999)
     all_audios = search_items_in_bucket(bucket_name, folder_name + "/audio")
     combine_audio_files(all_audios, f'{folder_name}/output.mp3', random_number)
     
     # do captions
-    caption_audio_file(f's3://{bucket_name}/{folder_name}/output.mp3', f'{folder_name}/caption', random_number)
+    if caption_enabled:
+      caption_audio_file(f's3://{bucket_name}/{folder_name}/output.mp3', f'{folder_name}/caption', random_number)
     
     return {
         'statusCode': 200,
