@@ -30,10 +30,10 @@ openai.api_key = os.environ["OPENAI_API_KEY"]
 def generate_image_with_dalle(prompt,filename):
     try:
         response = openai.Image.create(
-            # model="dall-e-2",
-            # quality="standard",
-            model="dall-e-3",
-            quality="hd",
+            model="dall-e-2",
+            quality="standard",
+            # model="dall-e-3",
+            # quality="hd",
             prompt=prompt,
             n=1
             # specify other parameters as needed, such as size

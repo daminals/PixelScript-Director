@@ -171,6 +171,7 @@ def lambda_handler(event, context):
     audio_file = f"{folder_name}/output.mp3"
     captions_file = f"{folder_name}/caption.srt"
     all_imgs = search_items_in_bucket(bucket_name, folder_name + "/video")
+    print("Input files: ", all_imgs)
     output_video_file = combine_video_files(all_imgs, audio_file)
     
     if caption_enabled:
