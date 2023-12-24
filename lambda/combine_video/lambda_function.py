@@ -149,9 +149,9 @@ def compress_video(input_video):
       'ffmpeg',
       '-i', input_video,
       '-c:v', 'libx264',
-      '-crf', '23',
-      '-preset', 'slower',
-      '-r', '30',
+      '-crf', '3',
+      '-preset', 'faster',
+      '-r', '24',
       '-c:a', 'copy',
       output_video
     ]
