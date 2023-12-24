@@ -65,4 +65,4 @@ All generated content, including the script, images, and audio, is stored in an 
 
 ## Known Issues
 
-Occasionally, the final video will be corrupt, with the last few seconds of audio being cut, or the subtitles added improperly. This may be an issue with the amount of storage available to the lambda, or perhaps the way various components of the video are downloaded to the lambda. This issue is still a WIP.
+Occasionally, the final video will be corrupt, with the last few seconds of audio being cut. This may be an issue with the amount of storage available to the lambda, or perhaps the way various components of the video are downloaded to the lambda. This issue is still a WIP.
